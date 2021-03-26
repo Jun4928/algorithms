@@ -14,7 +14,30 @@
  */
 ```
 
-###
+### convertToColumns.js
+
+- 2차원 행렬이 주어졌을 때
+- column 기반으로 바꾸는 함수
+
+```js
+/**
+ *
+ * @param {arr[][]} matrix
+ * @returns {arr[][]} columns 기반 2차원 배열
+ */
+```
+
+### deleteUntil.js
+
+- 배열의 뒤에서 k 만큼 삭제하는 함수
+
+```js
+/**
+ *
+ * @param {T[]} arr
+ * @param {number} k
+ */
+```
 
 ### getCombination.js
 
