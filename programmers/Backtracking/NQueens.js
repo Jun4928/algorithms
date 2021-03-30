@@ -1,5 +1,4 @@
 const log = console.log
-
 const range = (n) => [...Array(n).keys()]
 
 function solution(n) {
@@ -10,9 +9,7 @@ function solution(n) {
 
   const NQueens = (row) => {
     if (row >= n) {
-      log('ending!!')
-      log('row', row)
-      log('columnSet::', columnsSet)
+      // 현재 열들의 정보가 담긴 집합이 Queen 이 놓인 자리
       result.push([...columnsSet])
       return
     }
@@ -20,6 +17,8 @@ function solution(n) {
     for (const column of range(n)) {
       if (canPlaceQueen(row, column)) {
         NQueens(row + 1)
+        // DFS 로 재귀호출 하고 난 후
+        // 이전의 상태로 만들어 주어야 한다.
         columnsSet.delete(column)
         diagonalDownSet.delete(row - column)
         diagonalUpSet.delete(row + column)
@@ -28,8 +27,6 @@ function solution(n) {
   }
 
   const canPlaceQueen = (row, column) => {
-    log(row, column)
-    log('columnsSet:;', columnsSet)
     if (columnsSet.has(column)) return false
     if (diagonalDownSet.has(row - column)) return false
     if (diagonalUpSet.has(row + column)) return false
