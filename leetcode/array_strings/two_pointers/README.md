@@ -31,3 +31,27 @@ It will never have more than O(n) time complexity.
 - Space: O(1), because it needs only spaces for pointers
 
 ### Two Sum with sorted array of unique integers
+
+- the brute force solution: iterate over all paris of integers => O(n^2)
+- because the array is sorted, two pointers to improve to an O(n)
+- if the target is less than two sum like **20 + 40 > 30**, should move the right pointer to get the sum smaller, vice versa.
+- the numbers are sorted, moving the left pointer increases the sum, the right pointer decreases the value of the sum.
+
+---
+
+# Another way to use two pointers
+
+- when the problem has two iterables in the input, two arrays
+
+> Move along both arrays at the same time until every element has been visited
+
+1. Each pointer starts at the first index
+2. Iterate until one of the pointers reaches the end of its array, or string
+3. At each loop, move the pointers towards the end, depending on the problem
+   - once at a time
+   - both at a time
+4. If we need to check all the elements of both iterables, need some extra code to make sure it
+
+```javascript
+
+```
