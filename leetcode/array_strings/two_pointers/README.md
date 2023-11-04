@@ -52,6 +52,82 @@ It will never have more than O(n) time complexity.
    - both at a time
 4. If we need to check all the elements of both iterables, need some extra code to make sure it
 
-```javascript
+### Sorted Integer, return a new array that combines both of them and is also sorted
 
+- if they're not sorted, it's better to combine and sort, which gives a time O(n\*logn), the cost of sorting.
+- with two pointers we can improve it to O(n+m) = O(n)
+
+```javascript
+/**
+ *  @param {number[]} arr1
+ *  @param {number[]} arr2
+ *  @return {number[]}
+ *
+ */
+
+function combineSorted(arr1, arr2) {
+  const result = []
+  let first = 0
+  let second = 0
+
+  while (first < arr1.length && second < arr2.length) {
+    if (arr1[first] < arr2[second]) {
+      result.push(arr1[first])
+      first++
+    } else {
+      result.push(arr2[second])
+      second++
+    }
+  }
+
+  while (first < arr1.length) {
+    result.push(arr1[first])
+    first++
+  }
+
+  while (second < arr2.length) {
+    result.push(arr2[second])
+    second++
+  }
+
+  return result
+}
 ```
+
+- Time: O(n)
+- Space: O(1)
+
+### Is Subsequence
+
+> Given the string s and t, return true if s is a subsequence of t, or false otherwise
+> a subsequence of string is a sequence of characters that can be obtained by deleting some (or none) of the characters from the original string, while maintaining the relative order of the remaining characters.
+> "ace" is a subsequence of "abcde" while "aec" is not.
+
+- In the same order
+
+```javascript
+/**
+ *
+ * @param {string} s
+ * @param {string} t
+ * @return {bool}
+ *
+ */
+function isSubsequence(s, t) {
+  let sPointer = 0
+  let tPointer = 0
+
+  while (sPointer < s.length && tPointer < t.length) {
+    if (s[sPointer] === t[tPointer]) {
+      sPointer++
+    }
+
+    tPointer++
+  }
+
+  return sPointer === s.length
+}
+```
+
+- in the mismatch scenario, discard the character since it's not useful
+- only move forward sPointer when we find a match, since the task is to match all characters in s.
