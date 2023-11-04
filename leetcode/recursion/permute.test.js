@@ -2,7 +2,7 @@ const assert = require('node:assert')
 const test = require('node:test')
 const { permute } = require('./permute')
 
-test('', t => {
+test('1.', t => {
   const input = [1, 2, 3]
   const output = [
     [1, 2, 3],
@@ -16,7 +16,7 @@ test('', t => {
   assert.deepEqual(result, output)
 })
 
-test('', t => {
+test('2.', t => {
   const input = [0, 1]
   const output = [
     [0, 1],
@@ -26,7 +26,7 @@ test('', t => {
   assert.deepEqual(result, output)
 })
 
-test('', t => {
+test('3.', t => {
   const input = [1]
   const output = [[1]]
   const result = permute(input)

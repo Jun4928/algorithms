@@ -1,6 +1,7 @@
-// url: https://leetcode.com/problems/permutations/description/
-
 /**
+ * url: https://leetcode.com/problems/permutations/description/
+ * #46 Permutations
+ *
  * @param {number[]} nums
  * @return {number[][]}
  */
