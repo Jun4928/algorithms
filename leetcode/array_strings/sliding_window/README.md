@@ -44,7 +44,7 @@
 - remove some elements from the window until it becomes valid again, by incrementing `left`, shirking the window
 - the window grows and shrinks, but always slides along to the right, until it reaches the end of the input iterable
 
-## Example
+## Example1
 
 - `nums = [3, 2, 1, 3, 1, 1] and k = 5.` find the longest sub-array, the sum of which is less or equal than K.
 
@@ -59,22 +59,22 @@
 
 ```js
 function findLongestSumLessAndEqualThanK(nums, K) {
-    let left = 0
-    let curr = 0
-    let answer = 0
-    for (let right = 0; right < nums.length - 1, right++) {
-        curr += nums[right]
-        while (curr > k) { // until it's valid
-            curr -= nums[left]
-            left ++
-        }
-
-        answer = Math.max(answer, right - left + 1) // to find the longest
+  let left = 0
+  let curr = 0
+  let answer = 0
+  for (let right = 0; right < nums.length; right++) {
+    curr += nums[right]
+    while (curr > k) {
+      // until it's valid
+      curr -= nums[left]
+      left++
     }
 
-    return answer
-}
+    answer = Math.max(answer, right - left + 1) // to find the longest
+  }
 
+  return answer
+}
 ```
 
 ```js
@@ -99,3 +99,51 @@ function fn(arr):
   - each window is O(1)
   - O(2n) = O(n), much faster
 - the while loop to increase left pointer, it starts at 0, only increases and never exceeds n
+
+## Example2
+
+- binary string s (only "0" and "1"), you may choose up to one "0" and flip it to a "1". What is the length of the longest substring achievable that contains only "1"?
+- s = "1101100111", the answer is 5, if the flip happens at index 2, the string becomes **11111**00111
+
+```js
+/**
+ *
+ * @param {string} s
+ * @return {number} the longest substring that only contains "1"
+ */
+function flipZero(s) {
+  let left = 0
+  let curr = 0
+  let result = 0
+
+  // it's much easier to find the longest substring that contains at most one "0"
+  for (let right = 0; right < s.length; right++) {
+    if (s[right] === '0') {
+      curr += 1
+    }
+
+    // while it's invalid
+    while (curr > 1) {
+      if (s[left] === '0') {
+        curr -= 1
+      }
+
+      left++
+    }
+
+    // store current window size
+    result = Math.max(result, right - left + 1)
+  }
+
+  return result
+}
+```
+
+- another way to look at the problem!
+- what if we find the longest substring that contains at most one "0"?
+- we can use an integer **curr** to keep track of how many "0" currently in the window
+- we didn't actually flip the number..., which is the point, breakthrough!
+
+---
+
+# Number of sub-arrays
