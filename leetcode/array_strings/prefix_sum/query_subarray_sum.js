@@ -7,10 +7,8 @@
  * @return {boolean[]}
  */
 function querySubArraySum(nums, queries, limit) {
-  const prefixSum = nums.reduce((acc, curr, idx) => {
-    acc.push((acc[idx - 1] ?? 0) + curr)
-    return acc
-  }, [])
+  let acc = 0
+  const prefixSum = nums.map(n => (acc += n))
 
   return queries.map(query => {
     const [i, j] = query
