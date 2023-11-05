@@ -153,6 +153,8 @@ function flipZero(s) {
 - (left, right), (left + 1, right), (left + 2, right) ... (right, right)
 - the number of valid windows ending at index right is equal to the size of the window, which is **right - left + 1**
 
+## Example3
+
 ```js
 /**
  * @param {number[]} nums
@@ -183,8 +185,68 @@ var numSubarrayProductLessThanK = function (nums, k) {
 
   return result
 }
+
+// left = 0, right = 0 => [10] count: 1
+// left = 0, right = 1 => [10, 5], [5] count: 2
+// left = 1, right = 2 => [5, 2], [2], count: 2
+// left = 1, right = 3 => [5, 2, 6], [2, 6], [6], count: 3
 ```
 
 ---
 
 # Fixed Window Size
+
+- sometimes, problems will require a fixed length sub-array
+- add one element on the right and remove one element on the left to maintain the fixed length
+
+```js
+function fn(arr, k):
+    curr = some data to track the window
+
+    // build the first window
+    for (int i = 0; i < k; i++)
+        Do something with curr or other variables to build first window
+
+    ans = answer variable, probably equal to curr here depending on the problem
+    for (int i = k; i < arr.length; i++)
+        Add arr[i] to window
+        Remove arr[i - k] from window
+        Update ans
+
+    return ans
+```
+
+## Example4
+
+- given an integer array nums and an integer k, find the sum of the subarray with the largest sum whose length is k.
+
+```js
+/**
+ *
+ * @param {number[]} nums
+ * @param {number} k
+ *
+ * @return {number} the sum of the subarray
+ */
+function findLargestSumWithK(nums, k) {
+  let curr = 0
+  let left = 0
+  let currentSum = 0
+  let largestSum = 0
+
+  for (let right = 0; right < nums.length; right++) {
+    curr += 1
+    currentSum += nums[right]
+
+    while (curr > k) {
+      curr -= 1
+      currentSum -= nums[left]
+      left++
+    }
+
+    largestSum = Math.max(largestSum, currentSum)
+  }
+
+  return largestSum
+}
+```
