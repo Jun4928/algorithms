@@ -51,4 +51,45 @@ function querySubArraySum(nums, queries, limit) {
 
 ## Example2
 
-## Example3
+```js
+var waysToSplitArray = function (nums) {
+  const prefixSum = nums.reduce((acc, val, idx) => {
+    acc.push((acc[idx - 1] ?? 0) + val)
+    return acc
+  }, [])
+
+  return nums
+    .slice(0, -1)
+    .map((_, idx) => {
+      const left = prefixSum[idx]
+      const right = prefixSum[nums.length - 1] - prefixSum[idx]
+      return left >= right
+    })
+    .reduce((acc, val) => (val == true ? acc + 1 : acc), 0)
+}
+
+var waysToSplitArray = function (nums) {
+  const total = nums.reduce((acc, val) => acc + val, 0)
+  let leftSum = 0
+  let rightSum = 0
+  let result = 0
+
+  for (let idx = 0; idx < nums.length - 1; idx++) {
+    leftSum += nums[idx]
+    rightSum = total - leftSum
+
+    if (leftSum >= rightSum) {
+      result += 1
+    }
+  }
+
+  return result
+}
+```
+
+- if it was a brute force, it would be O(n^2)
+  - each index from 0 until nums.length - i, because there is (length - 1) ways of splitting the array => O(n)
+  - in each iterate, left sum, right sum => O(n)
+- with prefix sum O(n)
+- actually it doesn't need an array to store prefix sum, just use total
+- because left sum is just from 0 to i, right sum is total - leftSum
