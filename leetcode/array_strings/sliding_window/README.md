@@ -147,3 +147,44 @@ function flipZero(s) {
 ---
 
 # Number of sub-arrays
+
+- math trick that helps to calculate the number of sub-arrays
+- (left, right) how many valid windows end at index right?
+- (left, right), (left + 1, right), (left + 2, right) ... (right, right)
+- the number of valid windows ending at index right is equal to the size of the window, which is **right - left + 1**
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var numSubarrayProductLessThanK = function (nums, k) {
+  if (k <= 1) {
+    return 0
+  }
+
+  let left = 0
+  let curr = 1
+  let result = 0
+
+  for (let right = 0; right < nums.length; right++) {
+    curr *= nums[right]
+
+    // while it's invalid
+    while (curr >= k) {
+      curr /= nums[left]
+      left++
+    }
+
+    // when the sub-array becomes valid
+    result += right - left + 1
+  }
+
+  return result
+}
+```
+
+---
+
+# Fixed Window Size
