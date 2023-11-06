@@ -13,8 +13,6 @@ var minStartValue = function (nums) {
     minimumPrefixSum = Math.min(minimumPrefixSum, acc)
   }
 
-  console.log(minimumPrefixSum)
-
   return -minimumPrefixSum + 1
 }
 
