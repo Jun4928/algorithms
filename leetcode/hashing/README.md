@@ -118,3 +118,56 @@ const findNumbers = function (nums) {
 
 - Time: O(n)
 - Space: O(n)
+
+---
+
+# Counting
+
+- tracking the frequency of things
+- For example, longest substring with at most `k 0`s. In those problems, only used `curr`, only focusing on one element(0).
+- A Hash Map opens the door to solving problems with the constraint involving multiple elements.
+
+### Example1
+
+> You are given a string s and an integer k. Find the length of the longest substring that contains at most k distinct characters.
+
+For example, given s = "eceba" and k = 2, return 3. The longest substring with at most 2 distinct characters is "ece".
+
+```js
+function distinctCharactersAtMostK(s, k) {
+  const distinct = new Map()
+
+  let left = 0
+  let longest = 0
+  for (let right = 0; right < s.length; right++) {
+    distinct.set(s[right], (distinct.get(s[right]) ?? 0) + 1)
+
+    // when invalid
+    while (distinct.size > k) {
+      distinct.set(s[left], distinct.get(s[left]) - 1)
+      if (distinct.get(s[left]) === 0) {
+        distinct.delete(s[left])
+      }
+      left++
+    }
+
+    // when valid
+    longest = Math.max(longest, right - left + 1)
+  }
+
+  return longest
+}
+```
+
+- Time: O(n), due to hash map having O(1) operations
+- Space: O(k), the algorithm will delete elements from the hash map once it grows beyond target k
+
+### [Example2](https://leetcode.com/problems/intersection-of-multiple-arrays/)
+
+### [Example3](https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences/)
+
+## Count the number of subarrays with an "exact" constraint
+
+### [Example4](https://leetcode.com/problems/subarray-sum-equals-k/)
+
+### [Example5](https://leetcode.com/problems/count-number-of-nice-subarrays/)
