@@ -79,3 +79,42 @@ var twoSum = function (nums, target) {
 - Space: O(n) the number of keys to store as the same as the length of the input array
 
 ### Example2
+
+```js
+var repeatedCharacter = function (s) {
+  const occurred = new Set()
+
+  for (const c of s) {
+    if (occurred.has(c)) {
+      return c
+    }
+
+    occurred.add(c)
+  }
+
+  throw TypeError('MUST BE EXIST')
+}
+```
+
+- Time: O(n), for each loop, constant time of set operation
+- Space: O(m), m is the number of allowable characters
+
+### Example3
+
+> Given an integer array nums, find all the numbers x in nums that satisfy the following: x + 1 is not in nums, and x - 1 is not in nums.
+
+```js
+const findNumbers = function (nums) {
+  const result = []
+  const numbers = new Set(nums)
+  for (const num of nums) {
+    if (!numbers.has(num + 1) && !numbers.has(num - 1)) {
+      result.push(num)
+    }
+  }
+  return result
+}
+```
+
+- Time: O(n)
+- Space: O(n)
