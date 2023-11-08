@@ -264,4 +264,39 @@ var subarraySum = function (nums, k) {
 - Time: O(n), each loop constant operation time
 - Space: O(n), the hash map can grow to a size of n elements
 
+> The fundamental concept lies in the fact that if a subarray ending at the current index has a sum of k, it implies that the difference between the current sum (curr) and the sum of a subarray with the desired sum (k) should match a previous prefix sum in the array. This is because finding the sum of a subarray involves taking the difference between two prefix sums.
+> So, if curr - k equals a prefix sum encountered earlier in the array, it means that the difference k exists between the current sum and a previous sum, signifying the presence of a subarray that meets the required sum of k.
+> Therefore, checking whether curr - k has been seen before in the counts hashmap is crucial. If this difference exists in the hashmap, it indicates that there have been previous prefix sums whose subtraction from the current sum results in the desired value of k, representing valid sub-arrays with the exact sum required.
+
 ### [Example5](https://leetcode.com/problems/count-number-of-nice-subarrays/)
+
+```js
+var numberOfSubarrays = function (nums, k) {
+  // if sub-array has K odd numbers, count it
+
+  const oddMap = new Map()
+  oddMap.set(0, 1) // empty sub-array
+
+  let currOdds = 0
+  let result = 0
+
+  for (const num of nums) {
+    currOdds += isOdd(num) ? 1 : 0
+    const diff = currOdds - k
+    result += oddMap.get(diff) ?? 0
+    oddMap.set(currOdds, (oddMap.get(currOdds) ?? 0) + 1)
+  }
+
+  return result
+}
+
+function isOdd(num) {
+  return num % 2 === 1
+}
+```
+
+- the pattern is the same
+- `curr(odds) - (curr(odds) - K) = K`
+- check how many `curr(odds) - K` have occurred
+- Time: O(n)
+- Space: O(n)
