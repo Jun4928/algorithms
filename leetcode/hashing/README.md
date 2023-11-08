@@ -230,6 +230,38 @@ var areOccurrencesEqual = function (s) {
 
 ## Count the number of sub-arrays with an "exact" constraint
 
+> For example, "Find the number of subarrays that have a sum less than k" with an input that only has positive numbers would be solved with sliding window. In this section, we would be talking about questions like "Find the number of subarrays that have a sum exactly equal to k".
+
+- using prefix sum, differences in the prefix sum equal to K represents a sub-array with a sum equal to k.
+
 ### [Example4](https://leetcode.com/problems/subarray-sum-equals-k/)
+
+```js
+var subarraySum = function (nums, k) {
+  const differences = new Map()
+  differences.set(0, 1)
+
+  let curr = 0
+  let result = 0
+  for (const num of nums) {
+    curr += num
+    const diff = curr - k
+    result += differences.get(diff) ?? 0
+    differences.set(curr, (differences.get(curr) ?? 0) + 1)
+  }
+
+  return result
+}
+```
+
+- use this formula: `curr - (curr -K) = K`
+- **curr** is to track the prefix sum, accumulator
+- input numbers can be negative, so use a hash map to track how many `curr-k` have been occurred
+- if there has been `[curr - K]` in the hash map, this means current sub-array sum is exactly K
+- the thing is, you need to set up empty sub-array in the hash map, which is **counter.set(0, 1)**, otherwise the valid subarray will be lost
+  - [1,2,3], K=1, sub-array is only [1]
+  - if it wasn't initialized, [1] will be lost, because there's nothing in the hash map
+- Time: O(n), each loop constant operation time
+- Space: O(n), the hash map can grow to a size of n elements
 
 ### [Example5](https://leetcode.com/problems/count-number-of-nice-subarrays/)
