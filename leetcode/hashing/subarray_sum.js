@@ -1,4 +1,7 @@
 /**
+ * https://leetcode.com/problems/subarray-sum-equals-k/
+ * # 560. Subarray Sum Equals K
+ *
  * @param {number[]} nums
  * @param {number} k
  * @return {number}
