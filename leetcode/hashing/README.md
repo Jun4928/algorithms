@@ -164,9 +164,71 @@ function distinctCharactersAtMostK(s, k) {
 
 ### [Example2](https://leetcode.com/problems/intersection-of-multiple-arrays/)
 
+```js
+var intersection = function (nums) {
+  const intersectionMap = new Map()
+
+  nums.forEach(arr => {
+    arr.forEach(num => {
+      if (intersectionMap.has(num)) {
+        intersectionMap.set(num, intersectionMap.get(num) + 1)
+      } else {
+        intersectionMap.set(num, 1)
+      }
+    })
+  })
+
+  return Array.from(intersectionMap)
+    .filter(([num, freq]) => freq === nums.length)
+    .map(([num]) => num)
+    .sort((a, b) => a - b)
+}
+```
+
+- Time: O(N \* (N + logN))
+  - O(N\*M) to iterate
+  - O(N\*logM) to sort
+- Space: O(N \* M)
+
 ### [Example3](https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences/)
 
-## Count the number of subarrays with an "exact" constraint
+```js
+var areOccurrencesEqual = function (s) {
+  const freqMap = new Map()
+
+  for (const character of s) {
+    if (freqMap.has(character)) {
+      freqMap.set(character, freqMap.get(character) + 1)
+    } else {
+      freqMap.set(character, 1)
+    }
+  }
+
+  return Array.from(freqMap).every(([_, freq]) => {
+    return s.length / freqMap.size === freq
+  })
+}
+
+var areOccurrencesEqual = function (s) {
+  const counter = new Map()
+  for (const character of s) {
+    if (counter.has(character)) {
+      counter.set(character, counter.get(character) + 1)
+    } else {
+      counter.set(character, 1)
+    }
+  }
+
+  return new Set(counter.values()).size === 1
+}
+```
+
+- Time: O(N)
+- Space: O(K), K is the number of characters that could be in the input
+
+---
+
+## Count the number of sub-arrays with an "exact" constraint
 
 ### [Example4](https://leetcode.com/problems/subarray-sum-equals-k/)
 
