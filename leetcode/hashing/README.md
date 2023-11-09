@@ -300,3 +300,34 @@ function isOdd(num) {
 - check how many `curr(odds) - K` have occurred
 - Time: O(n)
 - Space: O(n)
+
+---
+
+# More Hashing Examples
+
+## [Example1](https://leetcode.com/problems/group-anagrams/)
+
+```js
+var groupAnagrams = function (strings) {
+  // group by same alphabet frequency
+  // key: alphabet order sorted
+  const anagrams = strings.reduce((acc, curr) => {
+    const key = [...curr].sort().join('')
+    const values = acc.get(key) ?? []
+    values.push(curr)
+    acc.set(key, values)
+    return acc
+  }, new Map())
+
+  return [...anagrams.values()]
+}
+```
+
+- Time: O(N \* M \* logM): N as the length of strings and M as the average length of the strings
+- Space: O(N \* M): each string will be placed in an array within the hash map
+
+## [Example2](https://leetcode.com/problems/minimum-consecutive-cards-to-pick-up/)
+
+## [Example3](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)
+
+## [Example4](https://leetcode.com/problems/equal-row-and-column-pairs/)
