@@ -328,6 +328,31 @@ var groupAnagrams = function (strings) {
 
 ## [Example2](https://leetcode.com/problems/minimum-consecutive-cards-to-pick-up/)
 
+```js
+var minimumCardPickup = function (cards) {
+  // the minimum number of consecutive cards
+  // a pair of cards are matched, if the cards have the same value
+
+  let lastIndexMap = new Map()
+  let min = Number.POSITIVE_INFINITY
+
+  cards.forEach((card, idx) => {
+    if (lastIndexMap.has(card)) {
+      min = Math.min(min, idx - lastIndexMap.get(card) + 1)
+    }
+
+    lastIndexMap.set(card, idx)
+  })
+
+  return min === Number.POSITIVE_INFINITY ? -1 : min
+}
+```
+
+n is the length of the input array
+
+- Time: O(n)
+- Space: O(n)
+
 ## [Example3](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)
 
 ## [Example4](https://leetcode.com/problems/equal-row-and-column-pairs/)
