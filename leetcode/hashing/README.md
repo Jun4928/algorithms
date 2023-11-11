@@ -355,4 +355,39 @@ n is the length of the input array
 
 ## [Example3](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)
 
+```js
+var maximumSum = function (nums) {
+  let maxSum = Number.NEGATIVE_INFINITY
+  const maxMap = new Map()
+
+  nums.forEach(num => {
+    const key = sumOfDigits(num)
+    if (maxMap.has(key)) {
+      const maxNum = maxMap.get(key)
+      maxSum = Math.max(maxSum, maxNum + num)
+      maxMap.set(key, Math.max(maxNum, num))
+    } else {
+      maxMap.set(key, num)
+    }
+  })
+
+  return maxSum === Number.NEGATIVE_INFINITY ? -1 : maxSum
+}
+
+function sumOfDigits(number) {
+  let sum = 0
+  while (number > 0) {
+    sum += number % 10
+    number = Math.floor(number / 10)
+  }
+
+  return sum
+}
+```
+
+n is the length of the input array
+
+- Time: O(n)
+- Space: O(n)
+
 ## [Example4](https://leetcode.com/problems/equal-row-and-column-pairs/)
