@@ -391,3 +391,28 @@ n is the length of the input array
 - Space: O(n)
 
 ## [Example4](https://leetcode.com/problems/equal-row-and-column-pairs/)
+
+```js
+var equalPairs = function (grid) {
+  const columns = Array.from(Array(grid.length)).map(_ => [])
+  grid.forEach(row => {
+    row.forEach((value, idx) => {
+      columns[idx].push(value)
+    })
+  })
+
+  const columnMap = columns
+    .map(column => column.join(`,`))
+    .reduce((acc, curr) => {
+      acc.set(curr, (acc.get(curr) ?? 0) + 1)
+      return acc
+    }, new Map())
+
+  return grid
+    .map(row => columnMap.get(row.join(`,`)) ?? 0)
+    .reduce((a, b) => a + b)
+}
+```
+
+- Time: O(n^2), n^2 elements, each element is iterated over twice
+- Space: O(n^2)
