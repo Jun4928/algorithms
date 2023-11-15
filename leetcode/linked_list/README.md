@@ -242,8 +242,7 @@ function fn(head):
 ### Example1
 
 > Example 1: Given the head of a linked list with an odd number of nodes head, return the value of the node in the middle.
-
-For example, given a linked list that represents 1 -> 2 -> 3 -> 4 -> 5, return 3.
+> For example, given a linked list that represents 1 -> 2 -> 3 -> 4 -> 5, return 3.
 
 - the difficulty comes from the fact that we don't know how long the input linked list is
 
@@ -292,3 +291,83 @@ const getMiddle = head => {
 - when fast reaches the end, the slow will be middle, because the input length is odd numbers
 
 ### [Example2](https://leetcode.com/problems/linked-list-cycle/)
+
+```js
+var hasCycle = function (head) {
+  // when faster reaches the visited, it is cycle
+  // or slower reaches null, it is not cycle
+  let slow = head
+  let fast = head
+  const visited = new Set([slow])
+
+  while (slow && fast && fast.next) {
+    slow = slow.next
+    fast = fast.next.next
+    visited.add(slow)
+
+    if (visited.has(fast)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+// the same
+var hasCycleWithoutSet = function (head) {
+  // when faster reaches the visited, it is cycle
+  // or slower reaches null, it is not cycle
+  let slow = head
+  let fast = head
+
+  while (fast && fast.next) {
+    slow = slow.next
+    fast = fast.next.next
+
+    if (slow == fast) {
+      return true
+    }
+  }
+
+  return false
+}
+```
+
+- if a linked list has a cycle, eventually there's a point where two pointers meet each other, faster will pass the slower runner
+- if fast runner never passes the slower one, it is not cycle
+- Time: O(n)
+- Space: O(1)
+
+```js
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function (head) {
+  let seen = new Set()
+  while (head) {
+    if (seen.has(head)) {
+      return true
+    }
+
+    seen.add(head)
+    head = head.next
+  }
+
+  return false
+}
+```
+
+- just store the previous one, and iterate through all the nodes
+- if it is cycle, eventually visit a node **twice**
+- Time: O(n)
+- Space: O(n)
+
+### Example3
+
+> Given the head of a linked list and an integer k, return the Kth node from the end.
+> For example, given the linked list that represents 1 -> 2 -> 3 -> 4 -> 5 and k = 2, return the node with value 4, as it is the 2nd node from the end.
+
+```js
+
+```
