@@ -216,3 +216,79 @@ let getSum = head => {
 
 - it's much better to keep a reference to the **head**
 - using the **dummy** pointer helps to keep head at the head
+
+---
+
+# Fast and Slow Pointers
+
+- similar to two pointers technique
+- two pointers that don't move side by side
+- move at different **speeds** during iteration
+- usually fast pointer moves two nodes per iteration, whereas the slow one moves one node per iteration (isn't always the case)
+
+```js
+function fn(head):
+    slow = head
+    fast = head
+
+    while fast and fast.next:
+        Do something here
+        slow = slow.next
+        fast = fast.next.next
+```
+
+- should check **fast.next**, because if **fast** is at the final node, **fast.next** is null, trying to access **fast.next.next** would result in error. Doing **null.next**
+
+### Example1
+
+> Example 1: Given the head of a linked list with an odd number of nodes head, return the value of the node in the middle.
+
+For example, given a linked list that represents 1 -> 2 -> 3 -> 4 -> 5, return 3.
+
+- the difficulty comes from the fact that we don't know how long the input linked list is
+
+```js
+let getMiddle = head => {
+  let length = 0
+  let dummy = head
+  while (dummy) {
+    length++
+    dummy = dummy.next
+  }
+
+  for (let i = 0; i < Math.floor(length / 2); i++) {
+    head = head.next
+  }
+
+  // arrive at the math.floor(length / 2), which is middle
+  return head.val
+}
+```
+
+- the easy solution is get the length by iteration through all
+- by moving dummy to the end, we can get the length
+- and then move head to the middle
+
+```js
+const getMiddle = head => {
+  // two pointers
+  let slow = head
+  let fast = head
+
+  while (fast && fast.next) {
+    slow = slow.next // move only one by one
+    fast = fast.next.next // move two times faster
+  }
+
+  // when fast reaches the end
+  // the slow will be middle
+  return slow.val
+}
+```
+
+- the most elegant way comes from using **fast and slow pointer**
+- slow moves at half the speed of fast
+- slow and fast completely independent of each other
+- when fast reaches the end, the slow will be middle, because the input length is odd numbers
+
+### [Example2](https://leetcode.com/problems/linked-list-cycle/)
