@@ -369,5 +369,25 @@ var hasCycle = function (head) {
 > For example, given the linked list that represents 1 -> 2 -> 3 -> 4 -> 5 and k = 2, return the node with value 4, as it is the 2nd node from the end.
 
 ```js
+const findNoe = (head, k) => {
+  let slow = head
+  let fast = head
 
+  for (let i = 0; i < k; i++) {
+    fast = fast.next
+  }
+
+  while (fast) {
+    slow = slow.next
+    fast = fast.next
+  }
+
+  return slow.value
+}
 ```
+
+- after move fast pointer K times
+- move both pointers at the same speed
+- when faster arrives the end, the slow pointer will be the answer
+- Time: O(n)
+- Space: O(1)
