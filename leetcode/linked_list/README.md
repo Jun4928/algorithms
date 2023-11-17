@@ -391,3 +391,31 @@ const findNoe = (head, k) => {
 - when faster arrives the end, the slow pointer will be the answer
 - Time: O(n)
 - Space: O(1)
+
+---
+
+# Reversing a linked list
+
+```js
+const reverseLinkedList = head => {
+  let prev = null
+  let curr = head
+
+  while (curr != null) {
+    const direction = curr.next // keep the direction
+    curr.next = prev // reverse direction by pointing previous one
+    prev = curr // move forward
+    curr = direction // move forward
+  }
+
+  return prev
+}
+```
+
+- Time: O(N), work done at each iteration is O(1)
+- Space: O(1), only using pointers
+- solutions to linked lists are usually simple and elegant
+
+1. `prev` is for tracking the previous one
+2. `prev` also needs updates at every iteration, `curr.next = prev`, `prev=curr`, which is for moving forward in the same direction
+3. avoid losing the reference to the original direction, we need a temporary pointer like `direction`
