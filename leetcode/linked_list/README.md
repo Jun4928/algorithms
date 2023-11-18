@@ -456,3 +456,45 @@ var swapPairs = function (head) {
 - Space: O(1)
 
 > you may miss a few steps like chaining, in an interview, vocal about your though process and the interviewer help you fill any gaps. Write down test cases, while working through the logic
+
+---
+
+# Reversal as only part of an algorithm
+
+## [Example](https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/description/)
+
+```js
+var pairSum = function (head) {
+  let slow = head
+  let fast = head
+
+  while (fast && fast.next) {
+    slow = slow.next
+    fast = fast.next.next
+  }
+
+  let reversed = null
+  let curr = slow
+  while (curr) {
+    const next = curr.next
+    curr.next = reversed
+    reversed = curr
+    curr = next
+  }
+
+  let maximum = -1
+  while (reversed) {
+    maximum = Math.max(maximum, head.val + reversed.val)
+
+    head = head.next
+    reversed = reversed.next
+  }
+
+  return maximum
+}
+```
+
+- find the middle with fast and slow pointer, fast is 2 times faster than slow
+- this is the second half where last moved slow pointer
+- reverse it
+- find the maximum sum
