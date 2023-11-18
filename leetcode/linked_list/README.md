@@ -419,3 +419,40 @@ const reverseLinkedList = head => {
 1. `prev` is for tracking the previous one
 2. `prev` also needs updates at every iteration, `curr.next = prev`, `prev=curr`, which is for moving forward in the same direction
 3. avoid losing the reference to the original direction, we need a temporary pointer like `direction`
+
+## [Example2](https://leetcode.com/problems/swap-nodes-in-pairs/description/?source=submission-ac)
+
+```js
+var swapPairs = function (head) {
+  if (head == null || head.next == null) {
+    return head
+  }
+
+  const newHead = head.next
+  let prev = null
+  let curr = head
+
+  while (curr && curr.next) {
+    const next = curr.next
+    curr.next = next.next
+    next.next = curr
+    if (prev) {
+      prev.next = next
+    }
+
+    // move forward
+    // prev is curr because curr has been swap with the next one
+    prev = curr
+    curr = curr.next
+  }
+
+  return newHead
+}
+```
+
+> in order to chain previous one to next, we should save **next** at each iteration
+
+- Time: O(N)
+- Space: O(1)
+
+> you may miss a few steps like chaining, in an interview, vocal about your though process and the interviewer help you fill any gaps. Write down test cases, while working through the logic
