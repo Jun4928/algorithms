@@ -87,9 +87,8 @@ var reverseBetween = function (head, left, right) {
 
 /**
  * sentinel node can generalize this logic
- * before: immutable node, which is right before the starting node being reversed
- * curr: being reversed, which moves forward by pointing next.next
- * next: next should be connected to before.next
+ * before: immutable pointer until reverse done, which is going to point at reversed head (=prev)
+ * start: immutable pointer until reverse done, which is going to point at end (=curr)
  */
 var reverseBetween = function (head, left, right) {
   if (left === right) {
@@ -101,14 +100,18 @@ var reverseBetween = function (head, left, right) {
   for (let i = 1; i < left; i++) {
     before = before.next
   }
-  let curr = before.next // starting point
+  let start = before.next
 
-  for (let i = left; i < right; i++) {
-    let next = curr.next
-    curr.next = next.next
-    next.next = before.next
-    before.next = next
+  let prev = null
+  let curr = start
+  for (let i = left; i <= right; i++) {
+    const next = curr.next
+    curr.next = prev
+    prev = curr
+    curr = next
   }
 
+  before.next = prev
+  start.next = curr
   return sentinel.next
 }
