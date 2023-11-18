@@ -60,23 +60,24 @@ var reverseBetween = function (head, left, right) {
     before = before.next
   }
 
+  // store ending point
   for (let i = 1; i <= right; i++) {
     end = end.next
   }
 
-  let prev = before
+  let prev = before // this is going to be head of the reversed list
   let curr = before.next
-  let start = before.next
+  let start = before.next // store starting point
 
   while (curr != end) {
     const next = curr.next
     curr.next = prev
     prev = curr
     curr = next
-  }
+  } // being reversed until the end point
 
-  start.next = end
-  before.next = prev
+  start.next = end // connect start to end
+  before.next = prev // connect the node right before the starting point to reversed head
   if (left === 1) {
     return before.next
   }
@@ -85,11 +86,10 @@ var reverseBetween = function (head, left, right) {
 }
 
 /**
- * sentinel node 를 사용하면 아래와 같이 일반화 가능
- * before: reverse 를 시작해야 하는 노드의 앞전 노드 (불변)
- * curr: reverse 를 하는 노드, 한 단계씩 자기 앞에 있는 놈과 자리를 바꾼다.
- * reversing 뿐만 아니라 before 와의 연결도 잊지 말아야한다.
- * curr 의 앞에 있는 놈이 before 바로 다음에 올 아이가 된다.
+ * sentinel node can generalize this logic
+ * before: immutable node, which is right before the starting node being reversed
+ * curr: being reversed, which moves forward by pointing next.next
+ * next: next should be connected to before.next
  */
 var reverseBetween = function (head, left, right) {
   if (left === right) {
