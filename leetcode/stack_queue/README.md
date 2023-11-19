@@ -88,3 +88,29 @@ class Stack {
 - deletion follows the LIFO pattern, where the last character is the first one to be deleted because adjacency
 - Time: O(N)
 - Space: O(N)
+
+## [Example 3: 844. Backspace String Compare](https://leetcode.com/problems/backspace-string-compare/description/)
+
+```js
+var backspaceCompare = function (s, t) {
+  return buildString(s) === buildString(t)
+}
+
+function buildString(s) {
+  const stack = []
+  for (const char of s) {
+    if (char === '#') {
+      stack.pop()
+    } else {
+      stack.push(char)
+    }
+  }
+
+  return stack.join(``)
+}
+```
+
+- LIFO pattern
+- the most recent character is the target being deleted when meets #
+- Time: O(N)
+- Space: O(N)
