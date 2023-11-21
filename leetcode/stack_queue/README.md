@@ -147,3 +147,56 @@ RecentCounter.prototype.ping = function (t) {
 
 - Time: O(N)
 - Queue shines when BFS appears!
+
+---
+
+# Monotonic
+
+- varying in such a way that it either never decreases or never increases
+- A monotonic stack | queue is one whose elements are always sorted
+- maintain sorted property by removing elements that would violate the property before adding new elements
+- `stack = [1, 5, 8, 15, 23]`, push **14**, becomes `stack = [1, 5, 8, 14]`
+
+```py
+stack = []
+for num in nums:
+    while stack.length > 0 AND stack.top >= num:
+        stack.pop()
+    # Between the above and below lines, do some logic depending on the problem
+
+    stack.push(num)
+```
+
+- check the top element is bigger than number, pop it out
+- Time: O(N), the inner while loop can only iterate over each element once
+- they're useful for problems involving the **next** element based on criteria. A dynamic window of elements, maintain the maximum or minimum element as the window changes
+
+## [Example 1: 739. Daily Temperatures](https://leetcode.com/problems/daily-temperatures/)
+
+```js
+var dailyTemperatures = function (temperatures) {
+  const stack = []
+  const answer = new Array(temperatures.length).fill(0)
+
+  temperatures.forEach((temp, idx) => {
+    while (stack.length > 0 && stack[stack.length - 1].temp < temp) {
+      const lowerTemp = stack.pop()
+      answer[lowerTemp.idx] = idx - lowerTemp.idx
+    }
+
+    stack.push({ temp, idx })
+  })
+
+  return answer
+}
+```
+
+- the stack is monotonically decreasing, guaranteed to pop elements only when the first warmer temperature!
+- Time: O(N)
+- Space: O(N)
+
+## [Example 2: 239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
+
+```js
+
+```
