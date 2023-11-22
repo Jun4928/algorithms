@@ -14,15 +14,21 @@ var maxSlidingWindow = function (nums, k) {
   let answer = []
 
   for (let idx = 0; idx < nums.length; idx++) {
+    // maintain monotonic decreasing deque
     while (deque.length && nums[deque[deque.length - 1]] < nums[idx]) {
       deque.pop()
     }
     deque.push(idx)
 
-    if (deque[0] + k === idx) {
+    // if right - left (the difference between right and left pointers)
+    // is the same as k, it's outside the window
+    // ex) idx = 3 deque[0] = 0, k = 3
+    // the window is left: 1, right: 3, 0 should be out
+    if (idx - deque[0] === k) {
       deque.shift()
     }
 
+    // window has reached size k
     if (idx >= k - 1) {
       answer.push(nums[deque[0]])
     }

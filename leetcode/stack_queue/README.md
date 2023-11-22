@@ -198,5 +198,38 @@ var dailyTemperatures = function (temperatures) {
 ## [Example 2: 239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
 
 ```js
+var maxSlidingWindow = function (nums, k) {
+  let deque = []
+  let answer = []
 
+  for (let idx = 0; idx < nums.length; idx++) {
+    // maintain monotonic decreasing deque
+    while (deque.length && nums[deque[deque.length - 1]] < nums[idx]) {
+      deque.pop()
+    }
+    deque.push(idx)
+
+    // if right - left (the difference between right and left pointers)
+    // is the same as k, it's outside the window
+    // ex) idx = 3 deque[0] = 0, k = 3
+    // the window is left: 1, right: 3, 0 should be out
+    if (idx - deque[0] === k) {
+      deque.shift()
+    }
+
+    // window has reached size k
+    if (idx >= k - 1) {
+      answer.push(nums[deque[0]])
+    }
+  }
+
+  return answer
+}
 ```
+
+- Time: O(N)
+- Space: O(K), because the deque can't grow beyond this K size
+  **KEY TAKEAWAYS**
+- monotonic decreasing deque, the first element is the maximum
+- the maximum element (the first one) is out of the window size, remove it, because idx increases one by one, we can assure that the first element is the target being deleted, `idx - deque[0] === k` if is the same as window size, it should be out, `right - left >= k` is the same meaning, **ex. idx = 3, dequeue[0]= 0, k =3, 0 is out of the window**
+- `idx >= k - 1`, when reaches window size, we push the maximum to the answer, **ex. idx = 2, k =3, window size is reached**
