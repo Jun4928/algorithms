@@ -233,3 +233,50 @@ var maxSlidingWindow = function (nums, k) {
 - monotonic decreasing deque, the first element is the maximum
 - the maximum element (the first one) is out of the window size, remove it, because idx increases one by one, we can assure that the first element is the target being deleted, `idx - deque[0] === k` if is the same as window size, it should be out, `right - left >= k` is the same meaning, **ex. idx = 3, dequeue[0]= 0, k =3, 0 is out of the window**
 - `idx >= k - 1`, when reaches window size, we push the maximum to the answer, **ex. idx = 2, k =3, window size is reached**
+
+## [Example 3: 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit](https://leetcode.com/explore/featured/card/leetcodes-interview-crash-course-data-structures-and-algorithms/706/stacks-and-queues/4517/)
+
+```js
+var longestSubarrayWrong = function (nums, limit) {
+  const maxDeque = []
+  const minDeque = []
+  let maximumSize = -1
+
+  let left = 0
+  for (let idx = 0; idx < nums.length; idx++) {
+    // maintain decreasing order
+    while (maxDeque.length && nums[maxDeque[maxDeque.length - 1]] < nums[idx]) {
+      maxDeque.pop()
+    }
+    maxDeque.push(idx)
+
+    // maintain increasing order
+    while (minDeque.length && nums[minDeque[minDeque.length - 1]] > nums[idx]) {
+      minDeque.pop()
+    }
+    minDeque.push(idx)
+
+    while (nums[maxDeque[0]] - nums[minDeque[0]] > limit) {
+      if (maxDeque[0] === left) {
+        maxDeque.shift()
+      }
+      if (minDeque[0] === left) {
+        minDeque.shift()
+      }
+
+      left++
+    }
+
+    maximumSize = Math.max(maximumSize, idx - left + 1)
+  }
+
+  return maximumSize
+}
+```
+
+- Time: O(N)
+- Space: O(N)
+- maximum deque, minimum deque maintain the order
+- just apply the standard sliding window algorithm: add elements from the right, remove them from the left whenever constraint is broken
+- when constraint broken, increase window size by **left++**
+- the thing is, just check if the maximum or minimum is the same as left
