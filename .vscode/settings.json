@@ -4,8 +4,11 @@
         "deque",
         "fileoverview",
         "heapify",
+        "Inorder",
         "logn",
         "nums",
+        "Postorder",
+        "Preorder",
         "Subarray"
     ]
 }
