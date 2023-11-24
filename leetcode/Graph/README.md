@@ -135,6 +135,21 @@ let postorderDfs = node => {
 ## [Example 1: 104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
 
 ```js
+var maxDepth = function (root) {
+  if (root == null) {
+    return 0
+  }
+
+  return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1
+}
+```
+
+- each function call stores its own variables
+- every node has its own unique values of **left** and **right**, which would be roots of the subtrees
+
+**iterative implementation**
+
+```js
 
 ```
 
