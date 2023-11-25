@@ -150,7 +150,33 @@ var maxDepth = function (root) {
 **iterative implementation**
 
 ```js
+var maxDepthWithStack = function (root) {
+  if (root == null) {
+    return 0
+  }
 
+  let maxDepth = 0
+  const stack = [{ node: root, depth: 1 }]
+  while (stack.length) {
+    const { node, depth } = stack.pop()
+    maxDepth = Math.max(maxDepth, depth)
+
+    if (node.right) {
+      stack.push({ node: node.right, depth: depth + 1 })
+    }
+
+    if (node.left) {
+      stack.push({ node: node.left, depth: depth + 1 })
+    }
+  }
+
+  return maxDepth
+}
 ```
+
+- the depth of the children will be `depth + 1`
+- in each iteration, it handles single node - equivalent to the recursive implementation
+- the thing is, we use stack, which pops the last in, so it iterates the left one with the above example
+- compare the maximum value at each iteration, when handling every single node, like done in the recursive call
 
 ---
