@@ -232,4 +232,61 @@ var hasPathSumWithStack = function (root, targetSum) {
 - Space: O(N), stack all visited
 - in the worst case scenario for space, the recursion call stack will grow to the same size as the number of nodes
 
----
+## [Example 3: 1448. Count Good Nodes in Binary Tree](https://leetcode.com/problems/count-good-nodes-in-binary-tree/)
+
+```js
+var goodNodes = function (root) {
+  let count = 0
+  const DFS = (node, prevMax) => {
+    if (node == null) {
+      return
+    }
+
+    if (node.val >= prevMax) {
+      count += 1
+    }
+
+    DFS(node.left, Math.max(prevMax, node.val))
+    DFS(node.right, Math.max(prevMax, node.val))
+    return
+  }
+
+  DFS(root, root.val)
+  return count
+}
+
+var goodNodesWithStack = function (root) {
+  if (root == null) {
+    return 0
+  }
+
+  let count = 0
+  const stack = [[root, root.val]]
+
+  while (stack.length) {
+    const [node, prevMax] = stack.pop()
+    if (node.val >= prevMax) {
+      count += 1
+    }
+
+    if (node.left) {
+      stack.push([node.left, Math.max(prevMax, node.val)])
+    }
+
+    if (node.right) {
+      stack.push([node.right, Math.max(prevMax, node.val)])
+    }
+  }
+
+  return count
+}
+```
+
+- Time: O(N)
+- Space: O(N)
+
+## [Example 4: 100. Same Tree](https://leetcode.com/problems/same-tree/)
+
+```js
+
+```
