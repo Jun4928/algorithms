@@ -179,4 +179,57 @@ var maxDepthWithStack = function (root) {
 - the thing is, we use stack, which pops the last in, so it iterates the left one with the above example
 - compare the maximum value at each iteration, when handling every single node, like done in the recursive call
 
+## [Example 2: 112. Path Sum](https://leetcode.com/problems/path-sum/)
+
+```js
+var hasPathSum = function (root, targetSum) {
+  const DFS = (node, sum) => {
+    if (node == null) {
+      return false
+    }
+
+    // ending condition is when both children all null, the node is a leaf
+    if (!node.left && !node.right) {
+      return sum + node.val === targetSum
+    }
+
+    const left = DFS(node.left, sum + node.val)
+    const right = DFS(node.right, sum + node.val)
+    return left || right
+  }
+
+  return DFS(root, 0)
+}
+
+var hasPathSumWithStack = function (root, targetSum) {
+  if (root == null) {
+    return false
+  }
+
+  const stack = [[root, 0]]
+  while (stack.length) {
+    const [node, sum] = stack.pop()
+    if (!node.left && !node.right) {
+      if (sum + node.val === targetSum) {
+        return true // when found the target, just return true
+      }
+    }
+
+    if (node.left) {
+      stack.push([node.left, sum + node.val])
+    }
+
+    if (node.right) {
+      stack.push([node.right, sum + node.val])
+    }
+  }
+
+  return false
+}
+```
+
+- Time: O(N), call stack
+- Space: O(N), stack all visited
+- in the worst case scenario for space, the recursion call stack will grow to the same size as the number of nodes
+
 ---
