@@ -332,3 +332,68 @@ var isSameTreeWithStack = function (p, q) {
 
 - Time: O(N)
 - Space: O(N)
+
+## [Bonus Example 236. Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+```js
+var lowestCommonAncestor = function (root, p, q) {
+  let lca = root
+
+  const DFS = node => {
+    if (node == null) {
+      return false
+    }
+
+    if (node === p || node === q) {
+      lca = node
+      return true
+    }
+
+    const left = DFS(node.left)
+    const right = DFS(node.right)
+
+    if (left && right) {
+      lca = node
+    }
+
+    return left || right
+  }
+
+  DFS(root)
+  return lca
+}
+
+var lowestCommonAncestor = function (root, p, q) {
+  const DFS = node => {
+    // if (node == null) {
+    //   return null
+    // }
+
+    // if (node === p || node === q) {
+    //   return node
+    // }
+    if (node == null || node === p || node === q) {
+      return node
+    }
+
+    const left = DFS(node.left)
+    const right = DFS(node.right)
+
+    if (left && right) {
+      return node
+    }
+
+    return left || right
+  }
+
+  return DFS(root)
+}
+```
+
+- if the node is p or q, return right away
+- if both left and right branches have p and q in each other one, return the node right away
+- otherwise, use **||** operator to return which branch has p or q
+
+- I did with boolean flag, use the trait of **||** operator
+- Time: O(N), each node is visited at most once and O(1) at each node
+- Space: O(N), the recursion call stack could use up to O(N) space
