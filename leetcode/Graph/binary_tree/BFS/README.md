@@ -111,3 +111,40 @@ var rightSideView = function (root) {
 ```
 
 - Space: O(N), the queue could hold up to O(N) nodes because it visits all nodes
+
+## [Example 2: 515. Find Largest Value in Each Tree Row](https://leetcode.com/problems/find-largest-value-in-each-tree-row/description/)
+
+```js
+var largestValues = function (root) {
+  if (root == null) {
+    return []
+  }
+
+  let answer = []
+  let queue = [root]
+
+  while (queue.length) {
+    let nextLevel = []
+    let sameLevelMax = Number.NEGATIVE_INFINITY
+    for (const node of queue) {
+      sameLevelMax = Math.max(sameLevelMax, node.val)
+
+      if (node.left) {
+        nextLevel.push(node.left)
+      }
+
+      if (node.left) {
+        nextLevel.push(node.right)
+      }
+    }
+
+    queue = nextLevel
+    answer.push(sameLevelMax)
+  }
+
+  return answer
+}
+```
+
+- Time: O(N)
+- Space: O(N)
