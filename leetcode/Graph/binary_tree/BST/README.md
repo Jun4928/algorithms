@@ -82,5 +82,26 @@ var getMinimumDifference = function (root) {
 ## [Example 3: 98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
 
 ```js
+var isValidBST = function (root) {
+  const DFS = (node, small, large) => {
+    if (node == null) {
+      return true
+    }
 
+    // check current is in range
+    if (small >= node.val || node.val >= large) {
+      return false
+    }
+
+    let left = dfs(node.left, small, node.val) // in BST, current should be larger than left
+    let right = dfs(node.right, node.val, large) // in BST, current should be smaller than right
+    return left && right
+  }
+
+  return DFS(root, -Infinity, Infinity)
+}
 ```
+
+- a tree is BFS, if subtrees are also BST
+- Time: O(N)
+- Space: O(N)
