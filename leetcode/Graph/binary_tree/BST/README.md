@@ -14,5 +14,73 @@
 ## Example 1: 938. Range Sum of BST
 
 ```js
+var rangeSumBST = function (root, low, high) {
+  const DFS = node => {
+    let sum = 0
+    if (node == null) {
+      return sum
+    }
+
+    if (node.val >= low && node.val <= high) {
+      sum += node.val
+    }
+
+    // otherwise pointless!
+    if (node.val > low) {
+      sum += DFS(node.left)
+    }
+
+    if (node.val < high) {
+      sum += DFS(node.right)
+    }
+
+    return sum
+  }
+
+  return DFS(root)
+}
+```
+
+- Time: O(N) for the worst case, but on average this will perform better than visiting all nodes
+- Space: O(N), recursion call stack
+
+## [Example 2: 530. Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst/)
+
+```js
+var getMinimumDifference = function (root) {
+  let prev = null
+  let minDiff = Infinity
+
+  const DFS = node => {
+    if (node == null) {
+      return
+    }
+
+    DFS(node.left)
+
+    // visit binary search using inorder: visit all values in sorted-order
+    if (prev != null) {
+      minDiff = Math.min(minDiff, node.val - prev)
+    }
+    prev = node.val
+
+    DFS(node.right)
+    return
+  }
+
+  DFS(root)
+
+  return minDiff
+}
+```
+
+- Time: O(N)
+- Space: O(N)
+- able to get the values in sorted order in leaner time by taking advantage of the Binary Search Tree, with in-order DFS
+- `[2, 1, 3]`: 1, 2, 3 in order DFS, we can get the nodes in sorted order without the O(N\*logN) sort, just O(N)
+
+## [Example 3: 98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
+
+```js
 
 ```
