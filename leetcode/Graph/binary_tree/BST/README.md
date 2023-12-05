@@ -93,8 +93,8 @@ var isValidBST = function (root) {
       return false
     }
 
-    let left = dfs(node.left, small, node.val) // in BST, current should be larger than left
-    let right = dfs(node.right, node.val, large) // in BST, current should be smaller than right
+    let left = DFS(node.left, small, node.val) // in BST, current should be larger than left
+    let right = DFS(node.right, node.val, large) // in BST, current should be smaller than right
     return left && right
   }
 
