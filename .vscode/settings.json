@@ -1,15 +1,17 @@
 {
-    "cSpell.words": [
-        "curr",
-        "deque",
-        "fileoverview",
-        "heapify",
-        "Inorder",
-        "logn",
-        "nums",
-        "Postorder",
-        "Preorder",
-        "prioritise",
-        "Subarray"
-    ]
+  "cSpell.words": [
+    "curr",
+    "deque",
+    "fileoverview",
+    "heapify",
+    "indegree",
+    "Inorder",
+    "logn",
+    "nums",
+    "outdegree",
+    "Postorder",
+    "Preorder",
+    "prioritise",
+    "Subarray"
+  ]
 }
