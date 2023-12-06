@@ -47,3 +47,5 @@ class TreeNode {
 ---
 
 # Graphs
+
+- graphs are part of everyday lives
