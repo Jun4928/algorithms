@@ -77,6 +77,7 @@ var findCircleNum = function (isConnected) {
     let stack = [node]
     while (stack.length) {
       const city = stack.pop()
+      seen[city] = true
       for (const neighbor of graph.get(city)) {
         if (seen[neighbor] == false) {
           seen[neighbor] = true
@@ -90,7 +91,6 @@ var findCircleNum = function (isConnected) {
   for (let city = 0; city < isConnected.length; city++) {
     if (seen[city] == false) {
       provinces += 1
-      seen[city] = true
       DFS(city)
     }
   }
@@ -120,6 +120,7 @@ var findCircleNum = function (isConnected) {
 
   let seen = new Array(isConnected.length).fill(false)
   const DFS = node => {
+    seen[node] = true
     for (const neighbor of graph.get(node)) {
       if (seen[neighbor] == false) {
         seen[neighbor] = true
@@ -134,7 +135,6 @@ var findCircleNum = function (isConnected) {
   for (let city = 0; city < isConnected.length; city++) {
     if (seen[city] == false) {
       provinces += 1
-      seen[city] = true
       DFS(city)
     }
   }

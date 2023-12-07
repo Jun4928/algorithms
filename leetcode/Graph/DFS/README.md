@@ -1,4 +1,4 @@
-## Example 1: 547. Number of Provinces
+## [Example 1: 547. Number of Provinces](https://leetcode.com/problems/number-of-provinces/)
 
 ### stack
 
@@ -28,6 +28,7 @@ var findCircleNum = function (isConnected) {
     let stack = [node]
     while (stack.length) {
       const city = stack.pop()
+      seen[city] = true
       for (const neighbor of graph.get(city)) {
         if (seen[neighbor] == false) {
           seen[neighbor] = true
@@ -41,7 +42,6 @@ var findCircleNum = function (isConnected) {
   for (let city = 0; city < isConnected.length; city++) {
     if (seen[city] == false) {
       provinces += 1
-      seen[city] = true
       DFS(city)
     }
   }
@@ -71,6 +71,7 @@ var findCircleNum = function (isConnected) {
 
   let seen = new Array(isConnected.length).fill(false)
   const DFS = node => {
+    seen[node] = true
     for (const neighbor of graph.get(node)) {
       if (seen[neighbor] == false) {
         seen[neighbor] = true
@@ -85,7 +86,6 @@ var findCircleNum = function (isConnected) {
   for (let city = 0; city < isConnected.length; city++) {
     if (seen[city] == false) {
       provinces += 1
-      seen[city] = true
       DFS(city)
     }
   }
@@ -93,3 +93,100 @@ var findCircleNum = function (isConnected) {
   return provinces
 }
 ```
+
+- to avoid cycles with undirected graphs, use a set _seen_ to track if the node has already been visited
+- DFS will visit all the nodes connected to a node
+- at each iteration, if a node has not been seen, it is another province
+- With a graph, a node could have any amount of neighbors, so a loop needed
+- DFS
+  - Time: O(N+E), N is the number of nodes and E is the number of edges
+  - worst case: every node is connected with every other node, E = N^2
+  - each node is visited only once
+  - iterating => O(N), and a node's edges are only iterated over once, O(E)
+- In this problem, to build a hash map from adjacency matrix
+  - Time: O(N^2)
+  - Space: O(N+E), for recursion stack and seen
+
+## [Example 2: 200. Number of Islands](https://leetcode.com/problems/number-of-islands/)
+
+```js
+var numIslands = function (grid) {
+  const LAND = '1'
+  const WATER = '0'
+  const VISITED = '-1'
+
+  const rows = grid.length
+  const columns = grid[0].length
+
+  const DFS = (i, j) => {
+    const notSafe = (i, j) => i < 0 || i >= rows || j < 0 || j >= columns
+    // not safe, water, visited just end the search
+    if (notSafe(i, j) || grid[i][j] === WATER || grid[i][j] === VISITED) {
+      return
+    }
+
+    grid[i][j] = VISITED // mark the current point as VISITED
+    DFS(i - 1, j)
+    DFS(i, j - 1)
+    DFS(i + 1, j)
+    DFS(i, j + 1)
+  }
+
+  let lands = 0
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < columns; j++) {
+      if (grid[i][j] === LAND) {
+        // when reaches land start the search
+        lands += 1
+        DFS(i, j)
+      }
+    }
+  }
+
+  return lands
+}
+
+var numIslands = function (grid) {
+  const LAND = '1'
+  const WATER = '0'
+  const rows = grid.length
+  const columns = grid[0].length
+
+  let seen = [...Array(rows)].map(_ => Array(columns).fill(false))
+  const DFS = (i, j) => {
+    const notSafe = (i, j) => i < 0 || i >= rows || j < 0 || j >= columns
+    if (notSafe(i, j) || grid[i][j] === WATER || seen[i][j] == true) {
+      return
+    }
+
+    seen[i][j] = true
+    const directions = [
+      [i - 1, j],
+      [i, j - 1],
+      [i + 1, j],
+      [i, j + 1],
+    ]
+    for (const [i, j] of directions) {
+      DFS(i, j)
+    }
+  }
+
+  let lands = 0
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < columns; j++) {
+      if (grid[i][j] === LAND && seen[i][j] == false) {
+        lands += 1
+        DFS(i, j)
+      }
+    }
+  }
+
+  return lands
+}
+```
+
+- directions in four way
+- can avoid using the set by modifying the input
+- some interviewers may not want me to modify the input
+- especially if it is something passed by reference like an array => it modifies the input array
+- Time: O(N+E), at most 4 edges, which is constant so finally, O(M\*N), M is rows, N is columns
