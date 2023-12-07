@@ -1,8 +1,57 @@
-## Example 1: 547. Number of Provinces
+/**
+ * https://leetcode.com/problems/number-of-provinces/description/
+ * 547. Number of Provinces
+ * 
+ * @param {number[][]} isConnected
+ * @return {number}
 
-### stack
+ a province is a group of directly or indirectly connected cities
+ isConnected[i][j] = 1, i and j are directly connected
+ isConnected[i][j] = 0, otherwise
 
-```js
+ the total number of provinces
+
+my solution
+ */
+var findCircleNum = function (isConnected) {
+  const graph = new Map()
+  isConnected.forEach((cities, i) => {
+    cities.forEach((connected, j) => {
+      if (connected === 1) {
+        if (!graph.has(i)) {
+          graph.set(i, [])
+        }
+
+        if (i !== j) {
+          graph.get(i).push(j)
+        }
+      }
+    })
+  })
+
+  let seen = new Array(isConnected.length).fill(false)
+  const stack = [...graph.keys()]
+  let provinces = 0
+  while (stack.length) {
+    const city = stack.pop()
+    if (seen[city] === 1) {
+      continue
+    }
+    seen[city] = 1
+
+    const connected = graph.get(city)
+    stack.push(...connected)
+
+    const isProvince =
+      connected.every(city => seen[city] == false) || connected.length === 0
+    if (isProvince) {
+      provinces += 1
+    }
+  }
+
+  return provinces
+}
+
 /**
  *
  * DFS with stack
@@ -48,11 +97,11 @@ var findCircleNum = function (isConnected) {
 
   return provinces
 }
-```
 
-### Recursion
-
-```js
+/**
+ *
+ * DFS with recursion
+ */
 var findCircleNum = function (isConnected) {
   const graph = new Map()
   isConnected.forEach((cities, i) => {
@@ -92,4 +141,3 @@ var findCircleNum = function (isConnected) {
 
   return provinces
 }
-```
