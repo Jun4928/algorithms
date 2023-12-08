@@ -190,3 +190,56 @@ var numIslands = function (grid) {
 - some interviewers may not want me to modify the input
 - especially if it is something passed by reference like an array => it modifies the input array
 - Time: O(N+E), at most 4 edges, which is constant so finally, O(M\*N), M is rows, N is columns
+
+## [Example 3: 1466. Reorder Routes to Make All Paths Lead to the City Zero](https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/)
+
+```js
+var minReorder = function (n, connections) {
+  const roadHash = (from, to) => `${from}-${to}`
+  const roads = new Set()
+  const graph = new Map()
+  for (const [from, to] of connections) {
+    if (!graph.has(from)) {
+      graph.set(from, [])
+    }
+    graph.get(from).push(to)
+
+    if (!graph.has(to)) {
+      graph.set(to, [])
+    }
+    graph.get(to).push(from)
+
+    roads.add(roadHash(from, to))
+  }
+
+  let seen = Array(n).fill(false)
+  let constructed = 0
+  const rebuild = origin => {
+    seen[origin] = true
+    const unseen = graph.get(origin).filter(city => seen[city] == false)
+    if (unseen.length === 0) {
+      return
+    }
+
+    for (const city of unseen) {
+      // needs rebuilding because, there's only one way, city must have a road to origin
+      if (roads.has(roadHash(origin, city))) {
+        constructed += 1
+      }
+      rebuild(city)
+    }
+  }
+
+  seen[0] = true
+  rebuild(0)
+  return constructed
+}
+```
+
+- Time: O(N), only visit each node once, do constant work
+- Space: O(N), **roads**, **graph**, **seen** are all at most O(N) space
+- The point
+  - Although it is a directed graph, convert it into an undirected so that we can reach all nodes from _the capital 0_
+  - when there's no unseen cities it is a leaf node, just return
+  - if _roads(set)_ has _a road from origin to city_, this means it needs reconstruction because there's no way to get back to origin from the city we're going to traverse!
+  - since we started from _0_, _seen_ needs to prevent revisiting cities
