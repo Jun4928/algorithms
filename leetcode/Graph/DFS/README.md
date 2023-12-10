@@ -243,3 +243,28 @@ var minReorder = function (n, connections) {
   - when there's no unseen cities it is a leaf node, just return
   - if _roads(set)_ has _a road from origin to city_, this means it needs reconstruction because there's no way to get back to origin from the city we're going to traverse!
   - since we started from _0_, _seen_ needs to prevent revisiting cities
+
+## [Example 4: 841. Keys and Rooms](https://leetcode.com/problems/keys-and-rooms/description/)
+
+```js
+var canVisitAllRooms = function (rooms) {
+  let seen = Array(rooms.length).fill(false)
+  const DFS = (keys, room) => {
+    if (seen[room]) {
+      return
+    }
+    seen[room] = true
+    for (const room of keys) {
+      DFS(rooms[room], room)
+    }
+  }
+
+  DFS(rooms[0], 0)
+  return seen.every(is => is == true)
+}
+```
+
+- This is equivalent to _starting a DFS from 0, can you visit all nodes?_
+- Adjacency lists are the most convenient input, because there's no deed to build a hash map
+- Time: O(N + E), visit each node once and the for loops inside each visit, E edges
+- Space: O(N), seen and the recursion call stack
