@@ -268,3 +268,20 @@ var canVisitAllRooms = function (rooms) {
 - Adjacency lists are the most convenient input, because there's no deed to build a hash map
 - Time: O(N + E), visit each node once and the for loops inside each visit, E edges
 - Space: O(N), seen and the recursion call stack
+
+## [Example 5: 1557. Minimum Number of Vertices to Reach All Nodes](https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/description/)
+
+```js
+var findSmallestSetOfVertices = function (n, edges) {
+  const toSet = new Set(edges.map(([from, to]) => to))
+
+  return Array(n)
+    .fill(0)
+    .map((v, idx) => v + idx)
+    .filter(node => !toSet.has(node))
+}
+```
+
+- A node cannot be reached from another node if it has an indegree of O (no edges are entering the node)
+- this works because the graph is a directed acyclic graph
+- If the graph had a cycle, there would be no nodes with an indegree of 0
