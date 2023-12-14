@@ -70,7 +70,7 @@ let printAllNodes = root => {
       }
     }
 
-    queue = nextQueue
+    queue = nextLevel
   }
 }
 ```
