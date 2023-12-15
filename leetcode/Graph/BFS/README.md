@@ -124,3 +124,125 @@ var distanceK = function (root, target, k) {
 - convert the tree into a graph
 - Both DFS and BFS perform constant work at each node
 - Time: O(N), Space: O(N)
+
+## [Example 3: 542. 01 Matrix](https://leetcode.com/problems/01-matrix/description/?source=submission-noac)
+
+### O(M^2\*N^2): Runtime Error solution
+
+```js
+var updateMatrix = function (mat) {
+  const rows = mat.length
+  const columns = mat[0].length
+  const notSafe = (row, col) =>
+    row < 0 || col < 0 || row >= rows || col >= columns
+  const directions = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ]
+
+  let seen = [...Array(rows)].map(_ => Array(columns).fill(false))
+  const BFS = (row, col) => {
+    let queue = [[row, col]]
+    let level = 0
+    while (queue.length) {
+      const nextQueue = []
+      for (const [currX, currY] of queue) {
+        for (const [dx, dy] of directions) {
+          const x = currX + dx
+          const y = currY + dy
+
+          if (notSafe(x, y)) {
+            continue
+          }
+
+          if (mat[x][y] === 0) {
+            mat[row][col] = level + 1
+            return
+          }
+
+          nextQueue.push([x, y])
+        }
+      }
+
+      queue = nextQueue
+      level += 1
+    }
+  }
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns; col++) {
+      if (mat[row][col] !== 0) {
+        BFS(row, col)
+      }
+    }
+  }
+
+  return mat
+}
+```
+
+- BFS from each 1 that stops until finding the first 0, very inefficient
+- Time: **O(M^2\*N^2)**
+  - each BFS costs _O(M\*N)_
+  - _O(M\*N)_ for different BFS if the entire matrix is only 1, except for single 0 in a corner
+
+### O(M\*N) solution
+
+```js
+var updateMatrix = function (mat) {
+  const rows = mat.length
+  const columns = mat[0].length
+  const notSafe = (row, col) =>
+    row < 0 || col < 0 || row >= rows || col >= columns
+  const directions = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ]
+
+  let seen = [...Array(rows)].map(_ => Array(columns).fill(false))
+  let queue = []
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns; col++) {
+      if (mat[row][col] === 0) {
+        seen[row][col] = true
+        queue.push([row, col])
+      }
+    }
+  }
+
+  let level = 0
+  while (queue.length) {
+    const nextQueue = []
+    for (const [currX, currY] of queue) {
+      mat[currX][currY] = level
+
+      for (const [dx, dy] of directions) {
+        const x = currX + dx
+        const y = currY + dy
+
+        if (!notSafe(x, y) && !seen[x][y]) {
+          seen[x][y] = true
+          nextQueue.push([x, y])
+        }
+      }
+    }
+
+    queue = nextQueue
+    level += 1
+  }
+
+  return mat
+}
+```
+
+- What if BFS starts from the zeros?, whenever encounters a one, the current level is the answer for that 1, _seen_ prevents the answer from being overridden
+- Multiple nodes in the 0th level in the queue is also possible
+  - I have only looked at problems where the 0th level ahd only one node
+  - source is any node with a value of 0
+  - each BFS iteration, the level is _the fewest steps possible_ from the source
+- Time: O(M\*N), only visits each square once, does a constant amount of work each time
+- Space: O(M\*N), _the queue_ and _seen_
