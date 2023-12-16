@@ -246,3 +246,75 @@ var updateMatrix = function (mat) {
   - each BFS iteration, the level is _the fewest steps possible_ from the source
 - Time: O(M\*N), only visits each square once, does a constant amount of work each time
 - Space: O(M\*N), _the queue_ and _seen_
+
+## [Example 4: 1293. Shortest Path in a Grid with Obstacles Elimination](https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/)
+
+```js
+/**
+ * @param {number[][]} grid
+ * @param {number} k
+ * @return {number}
+ */
+var shortestPath = function (grid, k) {
+  const rows = grid.length
+  const cols = grid[0].length
+  const directions = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ]
+  const notSafe = (x, y) => x < 0 || y < 0 || x >= rows || y >= cols
+
+  const getStateKey = (row, col, left) => `${row}-${col}-${left}`
+  const seen = new Set()
+  let queue = [[0, 0, k]]
+  seen.add(getStateKey(0, 0, k))
+  let level = 0
+
+  while (queue.length) {
+    const nextLevel = []
+    for (let [currX, currY, left] of queue) {
+      if (currX === rows - 1 && currY === cols - 1) {
+        return level
+      }
+
+      for (const [dx, dy] of directions) {
+        const x = currX + dx
+        const y = currY + dy
+        if (notSafe(x, y)) {
+          continue
+        }
+
+        if (grid[x][y] === 0) {
+          const state = getStateKey(x, y, left)
+          if (!seen.has(state)) {
+            seen.add(state)
+            nextLevel.push([x, y, left])
+          }
+        } else if (left > 0) {
+          // when obstacles
+          const state = getStateKey(x, y, left - 1)
+          if (!seen.has(state)) {
+            seen.add(state)
+            nextLevel.push([x, y, left - 1])
+          }
+        }
+      }
+    }
+
+    queue = nextLevel
+    level += 1
+  }
+
+  return -1
+}
+```
+
+- This idea of associating additional information with nodes is a very common and useful one
+- use (row, col, left) pair as the key for the state
+- I've just been using **seen** to avoid visiting the same node twice. In reality, **seen** prevents the logic from visiting the same _state_ twice
+  - just looked at problems where _the node(ex. row, col)_ entirely describes the state
+  - need to store **(node, left)** as state in _seen_
+- I was wondering when to decide eliminate the obstacles?!
+  - just do it on the same square when different _left_ count, because it has been reached from different situation, and can be used in the way to get the destination
