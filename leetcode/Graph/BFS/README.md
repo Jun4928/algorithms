@@ -318,3 +318,81 @@ var shortestPath = function (grid, k) {
   - need to store **(node, left)** as state in _seen_
 - I was wondering when to decide eliminate the obstacles?!
   - just do it on the same square when different _left_ count, because it has been reached from different situation, and can be used in the way to get the destination
+- Time: O(M*N*K), _M*N*K_ states
+- Space: O(M*N*K), _M*N*K_ states
+
+## [Example 5: 1129. Shortest Path with Alternating Colors](https://leetcode.com/problems/shortest-path-with-alternating-colors/description/)
+
+```js
+/**
+ * @param {number} n
+ * @param {number[][]} redEdges
+ * @param {number[][]} blueEdges
+ * @return {number[]}
+ */
+var shortestAlternatingPaths = function (n, redEdges, blueEdges) {
+  const reds = new Map()
+  for (const [from, to] of redEdges) {
+    if (!reds.has(from)) {
+      reds.set(from, [])
+    }
+    reds.get(from).push(to)
+  }
+  const blues = new Map()
+  for (const [from, to] of blueEdges) {
+    if (!blues.has(from)) {
+      blues.set(from, [])
+    }
+    blues.get(from).push(to)
+  }
+
+  const RED = `r`
+  const BLUE = `b`
+  let answer = Array(n).fill(-1)
+  const getState = (node, color) => `${node}-${color}`
+  let queue = [
+    [0, RED],
+    [0, BLUE],
+  ]
+  const seen = new Set(queue.map(([n, color]) => getState(n, color)))
+
+  let level = 0
+  while (queue.length) {
+    const nextQueue = []
+
+    for (const [curr, color] of queue) {
+      answer[curr] = answer[curr] === -1 ? level : Math.min(answer[curr], level)
+
+      if (color === RED) {
+        for (const node of blues.get(curr) ?? []) {
+          const state = getState(node, BLUE)
+          if (!seen.has(state)) {
+            seen.add(state)
+            nextQueue.push([node, BLUE])
+          }
+        }
+      } else if (color === BLUE) {
+        for (const node of reds.get(curr) ?? []) {
+          const state = getState(node, RED)
+          if (!seen.has(state)) {
+            seen.add(state)
+            nextQueue.push([node, RED])
+          }
+        }
+      }
+    }
+
+    queue = nextQueue
+    level += 1
+  }
+
+  return answer
+}
+```
+
+- start from 0 considering both colors `[0, RED], [0, BLUE]`
+- so introduce new state variable `color` and the seen must remember `node-color` as the key of the state
+- remember the previous color and check if **the state = node + opposite color** has been seen
+- color is always 2 way
+- Time: O(N + E), N nodes, E edges (total number of edges both colors)
+- Space: O(N + E)
