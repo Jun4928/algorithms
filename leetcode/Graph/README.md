@@ -137,3 +137,69 @@ let buildGraph = edges => {
 - without **seen**, DFS recursively will go infinite cycle
 - this isn't necessary with trees because only moved **down** - once left, there's no way to get back, but graphs have _A<->B_ relationship
 - array much better in speed for seen if the range is known, _(0 to n - 1)_
+
+# Implicit Graphs
+
+## [Example 1: 752. Open the Lock](https://leetcode.com/problems/open-the-lock/description/)
+
+```js
+var openLock = function (deadends, target) {
+  const possibilities = [
+    [0, 1],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [0, -1],
+    [1, -1],
+    [2, -1],
+    [3, -1],
+  ]
+
+  const wheel = (num, way) => {
+    return (Number(num) + way + 10) % 10
+  }
+
+  const getPossibles = number => {
+    return possibilities.map(([idx, way]) => {
+      return `${number.slice(0, idx)}${wheel(number[idx], way)}${number.slice(
+        idx + 1
+      )}`
+    })
+  }
+
+  let seen = new Set(deadends)
+  if (seen.has('0000')) {
+    return -1
+  }
+
+  let queue = ['0000']
+  seen.add('0000')
+  let moves = 0
+
+  while (queue.length) {
+    const nextQueue = []
+
+    for (const curr of queue) {
+      if (curr === target) {
+        return moves
+      }
+
+      const possibles = getPossibles(curr)
+      for (const next of possibles) {
+        if (!seen.has(next)) {
+          seen.add(next)
+          nextQueue.push(next)
+        }
+      }
+    }
+
+    queue = nextQueue
+    moves += 1
+  }
+
+  return -1
+}
+```
+
+- deadends can just set as _seen_, because it is blocked means it has been seen and cannot be reached
+- At each state, O(N^2 + D): loop over the n slots while performing string concatenation, O(N) for immutable strings, D is _deadends.length_ into a set
