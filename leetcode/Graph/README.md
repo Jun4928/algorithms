@@ -203,3 +203,60 @@ var openLock = function (deadends, target) {
 
 - deadends can just set as _seen_, because it is blocked means it has been seen and cannot be reached
 - At each state, O(N^2 + D): loop over the n slots while performing string concatenation, O(N) for immutable strings, D is _deadends.length_ into a set
+
+## Example 2: 399. Evaluate Division
+
+```js
+var calcEquation = function (equations, values, queries) {
+  const graph = new Map()
+  const characters = new Set()
+  equations.forEach(([a, b], idx) => {
+    const value = values[idx]
+    if (!graph.has(a)) {
+      graph.set(a, [])
+    }
+    graph.get(a).push([b, value])
+
+    if (!graph.has(b)) {
+      graph.set(b, [])
+    }
+    graph.get(b).push([a, 1 / value])
+
+    characters.add(a)
+    characters.add(b)
+  })
+
+  const DFS = (c, d, acc, seen) => {
+    const neighbors = graph.get(c)
+    let answer = -1
+    for (const [next, value] of neighbors) {
+      if (next === d) {
+        return acc * value
+      } else if (!seen.has(next)) {
+        seen.add(next)
+        answer = Math.max(answer, DFS(next, d, value * acc, seen))
+      }
+    }
+    return answer
+  }
+
+  return queries.map(([c, d]) => {
+    if (!characters.has(c) || !characters.has(d)) {
+      return -1
+    } else if (c === d) {
+      return 1
+    }
+
+    return DFS(c, d, 1, new Set([c]))
+  })
+}
+```
+
+- a weight is a value associated with an edge
+- the edges are provided in `equations`, and the weights are provided in `values`
+- edges are undirected
+- Time: O(Q \* (N + E))
+  - Q: the length of queries to iterate
+  - N: the number of nodes
+  - E: the number of edges
+- Space: O(N + E), building _graph_, _seen_, and the recursion call stack
