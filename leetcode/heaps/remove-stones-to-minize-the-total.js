@@ -21,8 +21,8 @@ var minStoneSum = function (piles, k) {
 
 /**
  * 
-  Time: O(N + K * logN)
-    - to convert piles into maxHeap
-    - perform K operations and each costs O(logN)
+  Time: O((N + K) * logN)
+    - to convert piles into maxHeap O(N logN)
+    - perform K operations and each costs O(K logN)
   Space: O(N): heap's length
  */
