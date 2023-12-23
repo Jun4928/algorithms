@@ -184,3 +184,59 @@ var halveArray = function (nums) {
 
 - Each iteration takes O(logN) for heal operations
 - Time: O(N \* logN)
+
+## [Example 3: 295. Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/description/)
+
+```js
+/**
+ * https://leetcode.com/problems/find-median-from-data-stream/description/
+ * 295. Find Median from Data Stream
+ *
+ */
+var MedianFinder = function () {
+  this.maxHeap = new PriorityQueue({
+    compare: (a, b) => (a > b ? -1 : 1),
+  }) // the first half
+  this.minHeap = new PriorityQueue({
+    compare: (a, b) => (a < b ? -1 : 1),
+  }) // the second half
+  this.ALLOWED_SIZE_DIFF = 1
+}
+
+/**
+ * @param {number} num
+ * @return {void}
+ */
+MedianFinder.prototype.addNum = function (num) {
+  this.maxHeap.enqueue(num)
+  this.minHeap.enqueue(this.maxHeap.dequeue())
+  if (this.minHeap.size() - this.maxHeap.size() > this.ALLOWED_SIZE_DIFF) {
+    this.maxHeap.enqueue(this.minHeap.dequeue())
+  }
+}
+
+/**
+ * @return {number}
+ */
+MedianFinder.prototype.findMedian = function () {
+  if (this.maxHeap.size() === this.minHeap.size()) {
+    return (this.maxHeap.front() + this.minHeap.front()) / 2
+  }
+
+  return this.minHeap.front()
+}
+```
+
+> all the elements in the min heap are larger than or equal to all the elements in the max heap, because the min heap stores the larger half
+
+- Push new number onto the max heap, it should be sorted in the heap
+- Pop from the max heap, which is the biggest in the max heap, and push it onto the min heap, which is the way to meet the need above
+- compare the difference, which should be less than _ONE_, if more elements in the min heap, moves the minimum value onto the max heap
+- if they are the same length, the fronts would be middle values
+- otherwise, the min heap's front is the median because I chose to move max heap's front onto the min heap
+- min heap's size always must be 1 more or equal to the size of the max heap
+
+- **O(1) to findMedian and O(logN) for addNum**
+- Space: O(N) to store the heaps
+
+> A heap is usually just a tool to accomplish something efficiently, in Greedy chapter, have a look at how they can help use implement efficient algorithms
