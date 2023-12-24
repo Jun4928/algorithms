@@ -253,5 +253,115 @@ MedianFinder.prototype.findMedian = function () {
 ## [Example 1: 347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
 
 ```js
+/**
+https://leetcode.com/problems/top-k-frequent-elements/
+347. Top K Frequent Elements
 
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ * 
+ * O (N * logN): sorting
+ */
+var topKFrequent = function (nums, k) {
+  const frequency = new Map()
+  for (const num of nums) {
+    if (!frequency.has(num)) {
+      frequency.set(num, 0)
+    }
+    frequency.set(num, frequency.get(num) + 1)
+  }
+
+  return [...frequency.entries()]
+    .sort((a, b) => {
+      if (a[1] > b[1]) return -1
+      return 1
+    })
+    .map(([val]) => val)
+    .slice(0, k)
+}
+
+/**
+ * using min heap, when the size is over the K limit
+ * then removes the minimum value
+ *
+ * O(N * logK), because the heap size is just K
+ * means O(logK) for heap add and remove
+ *
+ */
+var topKFrequent = function (nums, k) {
+  const frequency = new Map()
+  for (const num of nums) {
+    if (!frequency.has(num)) {
+      frequency.set(num, 0)
+    }
+    frequency.set(num, frequency.get(num) + 1)
+  }
+
+  const minHeap = new PriorityQueue({
+    compare: (a, b) => {
+      if (a[1] > b[1]) return 1
+      return -1
+    },
+  })
+
+  for (const freq of frequency.entries()) {
+    minHeap.enqueue(freq)
+    if (minHeap.size() > k) {
+      minHeap.dequeue()
+    }
+  }
+
+  return minHeap.toArray().map(([v]) => v)
+}
 ```
+
+- Time: O(N \*logK)
+  - Counting: O(N)
+  - Iterate: N times and perform O(logK) heap operations
+- Space: O(K) for the heap
+
+## [Example 2: 658. Find K Closest Elements](https://leetcode.com/problems/find-k-closest-elements/)
+
+```js
+/**
+https://leetcode.com/problems/find-k-closest-elements/
+658. Find K Closest Elements
+
+ * @param {number[]} arr
+ * @param {number} k
+ * @param {number} x
+ * @return {number[]}
+ */
+var findClosestElements = function (arr, k, x) {
+  const maxHeap = new PriorityQueue({
+    compare: (a, b) => {
+      const first = Math.abs(a - x)
+      const second = Math.abs(b - x)
+
+      if (first === second) {
+        return a > b ? -1 : 1
+      }
+
+      return first > second ? -1 : 1
+    },
+  })
+
+  for (const num of arr) {
+    maxHeap.enqueue(num)
+    if (maxHeap.size() > k) {
+      maxHeap.dequeue()
+    }
+  }
+
+  return maxHeap.toArray().sort((a, b) => (a < b ? -1 : 1))
+}
+```
+
+- When we want maximum(further), use min heap and removes the smaller ones reaching the size K, removes the closer ones
+- When we want minimum(closer), use max heap and removes the larger ones reaching the size K, removes the further ones
+- Time: O((N + K) \* logK)
+  - heap operation: O(logK), N iterations O(N \*log K)
+  - O(K \* logK) to sort
+- Space: O(K)
+- This approach doesn't use the fact that the array is sorted, so.. it's slower than **Binary Search**
