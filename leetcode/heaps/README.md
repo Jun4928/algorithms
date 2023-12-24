@@ -240,3 +240,18 @@ MedianFinder.prototype.findMedian = function () {
 - Space: O(N) to store the heaps
 
 > A heap is usually just a tool to accomplish something efficiently, in Greedy chapter, have a look at how they can help use implement efficient algorithms
+
+# Tok K
+
+- _k_ best elements, with "best" being defined by the problem
+- the easiest way to solve it is to just sort the input according to the criteria, and return th top _k_ elements. => O(N\*logN) for sorting N is the length of the input array
+- **using a heap, O(N \* logK). Logically, _K < N_, this is an improvement**
+- Even though log is so fast and it's not a big deal in terms of a speed increase, this is what the interviewers are asking for
+
+> max heap at the start, push every element onto the heap (according to the criteria), pop from the hep once the size exceeds _K_, which makes the heap size bounded by _K_, operations are at worst O(logK). And N iterations to get O(N \* logK), pops remove the "worst" elements, at the end, the _K_ "best" elements will remain in the heap!
+
+## [Example 1: 347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+
+```js
+
+```
