@@ -77,3 +77,5 @@ var partitionArray = function (nums, k) {
   return partitions
 }
 ```
+
+- Time: O(N \* logN), to sort
