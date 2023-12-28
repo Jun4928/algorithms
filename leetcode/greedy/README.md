@@ -126,3 +126,50 @@ var findMaximizedCapital = function (k, w, profits, capital) {
 - Should've come up with,, each pick, all the possibilities in the code
 - Time: O((K + N) \* log N), N is the number of projects, K pop operations, N push operations
 - Space: O(N) due to the heap
+
+## [Example 4: 1481. Least Number of Unique Integers after K Removals](https://leetcode.com/problems/least-number-of-unique-integers-after-k-removals/description/)
+
+```js
+/**
+https://leetcode.com/problems/least-number-of-unique-integers-after-k-removals/
+1481. Least Number of Unique Integers after K Removals
+
+ * @param {number[]} arr
+ * @param {number} k
+ * @return {number}
+ */
+var findLeastNumOfUniqueInts = function (arr, k) {
+  const freq = new Map()
+  for (const num of arr) {
+    if (!freq.has(num)) {
+      freq.set(num, 0)
+    }
+    freq.set(num, freq.get(num) + 1)
+  }
+
+  let ordered = [...freq.values()].sort((a, b) => (a > b ? -1 : 1))
+  let removal = 0
+
+  while (removal < k) {
+    let head = ordered.at(-1)
+    while (head > 0) {
+      head -= 1
+      removal += 1
+
+      if (head === 0) {
+        ordered.pop()
+      }
+
+      if (removal === k) {
+        break
+      }
+    }
+  }
+
+  return ordered.length
+}
+```
+
+- sort according to the frequencies of numbers
+- Time: O(N \* logN): to sort, each iteration O(1)
+- Space: O(N) to build a hash map
