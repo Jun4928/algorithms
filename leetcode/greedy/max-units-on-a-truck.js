@@ -52,3 +52,9 @@ var maximumUnits = function (boxTypes, truckSize) {
 
   return totalUnit
 }
+
+/**
+ * Time: O(N * logN) to sort
+ * Space: O(1)
+ *
+ */
