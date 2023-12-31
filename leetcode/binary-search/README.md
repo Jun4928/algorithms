@@ -93,3 +93,41 @@ let binarySearch = (arr, target) => {
   return left
 }
 ```
+
+---
+
+# On Arrays
+
+- **left** and **right** represent the bounds of the subarray currently considering
+- **mid** represents the index of the middle in the search space
+
+## [Example 1: 704. Binary Search](https://leetcode.com/problems/binary-search/)
+
+```js
+/**
+https://leetcode.com/problems/binary-search/
+704. Binary Search
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function (nums, target) {
+  let left = 0
+  let right = nums.length - 1
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (nums[mid] === target) {
+      return mid
+    }
+
+    if (nums[mid] > target) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return -1
+}
+```
