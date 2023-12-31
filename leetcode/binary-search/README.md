@@ -131,3 +131,51 @@ var search = function (nums, target) {
   return -1
 }
 ```
+
+- Time: O(logN)
+- Space: O(1)
+
+## [Example 2: 74. Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/)
+
+```js
+/**
+https://leetcode.com/problems/search-a-2d-matrix/
+74. Search a 2D Matrix
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function (matrix, target) {
+  // let's consider this matrix as one single array
+  const m = matrix.length
+  const n = matrix[0].length
+  let left = 0
+  let right = m * n - 1
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    const row = Math.floor(mid / n)
+    const col = mid % n
+
+    if (matrix[row][col] === target) {
+      return true
+    }
+
+    if (matrix[row][col] > target) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return false
+}
+```
+
+- consider the 2d matrix as a single array
+- M = matrix.length, N = matrix[0].length
+- indices are in the boundary **[0, M * N - 1]**
+- **row = Math.floor(index / N)**
+- **col = index % N**
+- because it is ensured that each row has N elements
+- O(log(M \* N))
