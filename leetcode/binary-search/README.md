@@ -188,6 +188,7 @@ var searchMatrix = function (matrix, target) {
  * @param {number[]} potions
  * @param {number} success
  * @return {number[]}
+ * when the target is not on the list, but wants to find the bigger ones than the target
  */
 var successfulPairs = function (spells, potions, success) {
   let binarySearch = (arr, target) => {
