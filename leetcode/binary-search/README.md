@@ -179,3 +179,46 @@ var searchMatrix = function (matrix, target) {
 - **col = index % N**
 - because it is ensured that each row has N elements
 - O(log(M \* N))
+
+## [Example 3: 2300. Successful Pairs of Spells and Potions](https://leetcode.com/problems/successful-pairs-of-spells-and-potions/description/)
+
+```js
+/**
+ * @param {number[]} spells
+ * @param {number[]} potions
+ * @param {number} success
+ * @return {number[]}
+ */
+var successfulPairs = function (spells, potions, success) {
+  let binarySearch = (arr, target) => {
+    left = 0
+    right = arr.length - 1
+    while (left <= right) {
+      let mid = Math.floor((left + right) / 2)
+      if (arr[mid] >= target) {
+        right = mid - 1
+      } else {
+        left = mid + 1
+      }
+    }
+
+    return left
+  }
+
+  potions.sort((a, b) => a - b)
+  let ans = []
+  let m = potions.length
+
+  for (const spell of spells) {
+    let i = binarySearch(potions, success / spell)
+    ans.push(m - i)
+  }
+
+  return ans
+}
+```
+
+- The brute force would O(N \* M)
+- by sorting **potions**, it can be done with binary search
+- Time: O((M + N) \* logM), O(M _ logM) for sorting, O(N _ logN) for iterations with binary search
+- Space: for sorting
