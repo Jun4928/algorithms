@@ -277,3 +277,69 @@ var minEatingSpeed = function (piles, h) {
   - binary search: O(logK)
   - canEatAll: O(N)
 - Given speed K. **Math.ceil(bananas / K)** in each pile is the time to eat all bananas in the pile
+
+## [Example 2: 1631. Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/description/)
+
+```js
+var minimumEffortPathDFSIterative = function (heights) {
+  const rows = heights.length
+  const cols = heights[0].length
+
+  const notSafe = (row, col) => row < 0 || col < 0 || row >= rows || col >= cols
+  const directions = [
+    [0, -1],
+    [0, 1],
+    [1, 0],
+    [-1, 0],
+  ]
+
+  const can = effort => {
+    let seen = [...Array(rows)].map(_ => Array(cols).fill(false))
+    seen[0][0] = true
+
+    let stack = [[0, 0]]
+    while (stack.length) {
+      const [currX, currY] = stack.pop()
+      if (currX === rows - 1 && currY === cols - 1) {
+        return true
+      }
+
+      for (const [dx, dy] of directions) {
+        const x = currX + dx
+        const y = currY + dy
+        if (!notSafe(x, y) && !seen[x][y]) {
+          const diff = Math.abs(heights[currX][currY] - heights[x][y])
+          if (diff <= effort) {
+            seen[x][y] = true
+            stack.push([x, y])
+          }
+        }
+      }
+    }
+
+    return false
+  }
+
+  let left = 0
+  let right = 0
+  for (const values of heights) {
+    right = Math.max(right, ...values)
+  }
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (can(mid)) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return left
+}
+```
+
+- Time: O(M \* N \* logK)
+  - O(M \* N): DFS
+  - O(logK): binary search
+- Space: O(M \* N): space for the stack and seen
