@@ -223,3 +223,23 @@ var successfulPairs = function (spells, potions, success) {
 - by sorting **potions**, it can be done with binary search
 - Time: O((M + N) \* logM), O(M _ logM) for sorting, O(N _ logN) for iterations with binary search
 - Space: for sorting
+
+---
+
+# On solution spaces
+
+- a more creative way to use binary search - on a solution space/answer
+- very common type: **What is the max/min that something can be done**
+- if the task is **possible for a number target**,
+  - A maximum, then it is also possible for all numbers less than target
+  - A minimum, then it is also possible for all numbers greater than target
+- if the task is **not possible for a number target**,
+  - A maximum, then it is also impossible for all numbers greater than target
+  - A minimum, then it is also impossible for all numbers less than target
+- **A threshold is the answer and can be binary searched for**
+
+## method
+
+- establish the possible solution space by identifying the minimum possible and the maximum possible
+- do binary search on the solution space. For each **mid**, perform a check to see if the task is possible. Depending on the result, halve the search space. Eventually, find the threshold
+- Time: O(N \* logK), K is the solution space's range
