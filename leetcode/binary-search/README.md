@@ -243,3 +243,37 @@ var successfulPairs = function (spells, potions, success) {
 - establish the possible solution space by identifying the minimum possible and the maximum possible
 - do binary search on the solution space. For each **mid**, perform a check to see if the task is possible. Depending on the result, halve the search space. Eventually, find the threshold
 - Time: O(N \* logK), K is the solution space's range
+
+## [Example 1: 875. Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/description/)
+
+```js
+var minEatingSpeed = function (piles, h) {
+  const canEatAll = k => {
+    let hours = 0
+    for (const bananas of piles) {
+      hours += Math.ceil(bananas / k)
+    }
+
+    return hours <= h
+  }
+
+  let left = 1
+  let right = Math.max(...piles)
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (canEatAll(mid)) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return left
+}
+```
+
+- Time: O(N \* logK)
+  - _K = max(piles)_
+  - binary search: O(logK)
+  - canEatAll: O(N)
+- Given speed K. **Math.ceil(bananas / K)** in each pile is the time to eat all bananas in the pile
