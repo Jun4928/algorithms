@@ -44,3 +44,29 @@ var searchMatrix = function (matrix, target) {
 
   return false
 }
+
+var searchMatrix = function (matrix, target) {
+  // let's consider this matrix as one single array
+  const m = matrix.length
+  const n = matrix[0].length
+  let left = 0
+  let right = m * n - 1
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    const row = Math.floor(mid / n)
+    const col = mid % n
+
+    if (matrix[row][col] === target) {
+      return true
+    }
+
+    if (matrix[row][col] > target) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return false
+}

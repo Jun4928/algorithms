@@ -343,3 +343,48 @@ var minimumEffortPathDFSIterative = function (heights) {
   - O(M \* N): DFS
   - O(logK): binary search
 - Space: O(M \* N): space for the stack and seen
+
+## [Example 3: 1870. Minimum Speed to Arrive on Time](https://leetcode.com/problems/minimum-speed-to-arrive-on-time/description/)
+
+```js
+/**
+https://leetcode.com/problems/minimum-speed-to-arrive-on-time/
+1870. Minimum Speed to Arrive on Time
+ * @param {number[]} dist
+ * @param {number} hour
+ * @return {number}
+ */
+var minSpeedOnTime = function (dist, hour) {
+  if (dist.length > Math.ceil(hour)) {
+    return -1
+  }
+
+  const can = speed => {
+    let take = 0
+    for (const d of dist) {
+      take = Math.ceil(take)
+      take += d / speed
+    }
+
+    return take <= hour
+  }
+
+  let left = 1
+  let right = Math.pow(10, 7)
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (can(mid)) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return left
+}
+```
+
+- always, don't forget to get through the details in the description
+- the answer will not exceed 10^7
+- if _dist.length > Math.ceil(hour)_, it can never meet the hour, because at least one hour take to take the next train
+- this means, I need to **Math.ceil(take)** to make sure the wait additional floating hours
