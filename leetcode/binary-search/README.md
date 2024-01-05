@@ -388,3 +388,68 @@ var minSpeedOnTime = function (dist, hour) {
 - the answer will not exceed 10^7
 - if _dist.length > Math.ceil(hour)_, it can never meet the hour, because at least one hour take to take the next train
 - this means, I need to **Math.ceil(take)** to make sure the wait additional floating hours
+
+## A note on implementation
+
+## **When looking for a minimum**
+
+- looking for a minimum and the answer is **mid**
+- after doing `can(mid) === true`, `right = mid - 1`
+- move right bound to look for a better (minimum) answer
+- `can(mid) === false`, `left = mid + 1`
+- keep left increasing left until `can(mid - 1)`
+- `left = (mid  - 1) + 1 = mid`, loop terminates `left > right`
+- **left is at the answer**
+
+```js
+let fn = arr => {
+  let check = x => {
+    // this function is implemented depending on the problem
+    return BOOLEAN
+  }
+
+  let left = MINIMUM_POSSIBLE_ANSWER
+  let right = MAXIMUM_POSSIBLE_ANSWER
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2)
+    if (check(mid)) {
+      right = mid - 1
+    } else {
+      left = mid + 1
+    }
+  }
+
+  return left
+}
+```
+
+## **When looking for a maximum**
+
+- after performing **can(mid)**
+- after doing `can(mid) === true`, `left = mid + 1`
+- the correct answer is outside of the search and all future checks will fail
+- keep decreasing right until `can(mid + 1)`
+- `right = (mid + 1) -1 = mid`, loop terminates `left > right`
+- **right is at the answer**
+
+```js
+let fn = arr => {
+  let check = x => {
+    // this function is implemented depending on the problem
+    return BOOLEAN
+  }
+
+  let left = MINIMUM_POSSIBLE_ANSWER
+  let right = MAXIMUM_POSSIBLE_ANSWER
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2)
+    if (check(mid)) {
+      left = mid + 1
+    } else {
+      right = mid - 1
+    }
+  }
+
+  return right
+}
+```
