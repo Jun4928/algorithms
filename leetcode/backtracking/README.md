@@ -81,6 +81,16 @@ const permuteBacktrack2 = nums => {
   backtrack([])
   return answer
 }
+
+Input: nums = [1, 2, 3]
+Output: [
+  [1, 2, 3],
+  [1, 3, 2],
+  [2, 1, 3],
+  [2, 3, 1],
+  [3, 1, 2],
+  [3, 2, 1],
+]
 ```
 
 - curr is only a reference to the array's address, this is why it should be copied
@@ -88,3 +98,45 @@ const permuteBacktrack2 = nums => {
 - the most important one is to go back to the parent node, it can simply implemented by popping out the last element of the current array
 - Time: O(N \* N!), each of those calls makes N - 1 calls, N - 2, etc.
 - Space: O(N) for curr and the recursion call stack
+
+## [Example 2: 78. Subsets](https://leetcode.com/problems/subsets/description/)
+
+```js
+var subsets = function (nums) {
+  const answer = []
+  const backtrack = (subset, prev) => {
+    if (prev > nums.length) {
+      return
+    }
+
+    console.log(subset, prev)
+    answer.push([...subset])
+    for (let curr = prev; curr < nums.length; curr++) {
+      subset.push(nums[curr])
+      backtrack(subset, curr + 1)
+      subset.pop()
+    }
+  }
+
+  backtrack([], 0)
+  return answer
+}
+
+- [] 0
+- [ 1 ] 1
+- [ 1, 2 ] 2
+- [ 1, 2, 3 ] 3
+- [ 1, 3 ] 3
+- [ 2 ] 2
+- [ 2, 3 ] 3
+- [ 3 ] 3
+
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+```
+
+- the thing is, subset could be any length, every node is an answer!
+- use the previous pointer to tell where to start iterating, in order to ensure that there'll be no duplicates!
+- `prevIndex > nums.length`: run out of numbers to use, actually the base cas is never hit, it is for clarity
+- Time: O(N \* 2^N), DFS on a tree with 2^N nodes and each node, make a copy of curr `[...curr]`
+- Space: O(N), recursion call stack
