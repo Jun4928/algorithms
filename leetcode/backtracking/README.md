@@ -140,3 +140,51 @@ Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 - `prevIndex > nums.length`: run out of numbers to use, actually the base cas is never hit, it is for clarity
 - Time: O(N \* 2^N), DFS on a tree with 2^N nodes and each node, make a copy of curr `[...curr]`
 - Space: O(N), recursion call stack
+
+## [Example 3: 77. Combinations](https://leetcode.com/problems/combinations/)
+
+```js
+/**
+https://leetcode.com/problems/combinations/
+77. Combinations
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function (n, k) {
+  const answer = []
+
+  const backtrack = (comb, prev) => {
+    if (comb.length === k) {
+      answer.push([...comb])
+      return
+    }
+
+    for (let num = prev; num <= n; num++) {
+      if (!comb.includes(num)) {
+        comb.push(num)
+        backtrack(comb, num + 1)
+        comb.pop()
+      }
+    }
+  }
+
+  backtrack([], 1)
+  return answer
+}
+
+Input: n = 4, k = 2
+Output: [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
+Explanation: There are 4 choose 2 = 6 total combinations.
+Note that combinations are unordered, i.e., [1,2] and [2,1] are considered to be the same combination.
+```
+
+- Time: upper bound is..
+  - on the first call, the for loop runs N times
+  - next call run N - 1 times,
+  - N - 2...
+  - O(N!), however the max depth is K - which means the factorial doesn't go down to 1
+  - O((N - K)!)
+  - Copy each combination costs O(K)
+  - O(K \* N! / (N - k)!)
+- Space: O(K) for `comb` and the recursion call stack
