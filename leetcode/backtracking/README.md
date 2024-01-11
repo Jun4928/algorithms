@@ -188,3 +188,49 @@ Note that combinations are unordered, i.e., [1,2] and [2,1] are considered to be
   - Copy each combination costs O(K)
   - O(K \* N! / (N - k)!)
 - Space: O(K) for `comb` and the recursion call stack
+
+---
+
+# More Constrained backtracking
+
+## [Example 1: 39. Combination Sum](https://leetcode.com/problems/combination-sum/description/)
+
+```js
+/**
+https://leetcode.com/problems/combination-sum/description/
+39. Combination Sum
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function (candidates, target) {
+  const answer = []
+  const backtrack = (sum, path, start) => {
+    if (sum === target) {
+      answer.push([...path])
+      return
+    }
+
+    for (let idx = start; idx < candidates.length; idx++) {
+      const num = candidates[idx]
+      if (sum + num <= target) {
+        path.push(num)
+        backtrack(sum + num, path, idx)
+        path.pop()
+      }
+    }
+  }
+
+  backtrack(0, [], 0)
+  return answer
+}
+```
+
+- start is the same as current index because it is allowed to use the same number
+- Time: O(N ^ (T/M))
+  - N = candidates.length
+  - T = target
+  - M = min(candidates)
+  - Maximum depth **T/M**: using the smallest number repeatedly until we exceed target
+  - Each Node can have up to N children in the worst case
+- Space: O(T/M), maximum call stack
