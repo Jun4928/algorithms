@@ -283,3 +283,56 @@ var totalNQueens = function (n) {
 
 - Time: O(N!), it isn't actually known, approximately
 - Space: O(N), recursion call stack
+
+## [Example 3: 79. Word Search](https://leetcode.com/problems/word-search/)
+
+```js
+var exist = function (board, word) {
+  let answer = false
+  const rows = board.length
+  const cols = board[0].length
+  const directions = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ]
+  const notSafe = (x, y) => x < 0 || y < 0 || x >= rows || y >= cols
+
+  const backtrack = (len, row, col, seen) => {
+    if (len === word.length) {
+      answer = true
+      return
+    }
+
+    for (const [dx, dy] of directions) {
+      const x = row + dx
+      const y = col + dy
+      if (!notSafe(x, y) && !seen[x][y] && word[len] === board[x][y]) {
+        seen[x][y] = true
+        backtrack(len + 1, x, y, seen)
+        seen[x][y] = false
+      }
+    }
+  }
+
+  board.forEach((chars, row) => {
+    chars.forEach((char, col) => {
+      if (char === word[0]) {
+        let seen = [...Array(rows)].map(_ => Array(cols).fill(false))
+        seen[row][col] = true
+        backtrack(1, row, col, seen)
+      }
+    })
+  })
+
+  return answer
+}
+```
+
+- Similar to DFS, using **seen** to avoid using the same square
+- build the word by only traversing to neighbors
+- remove current character from the seen, in order to revisit later!
+- Time: O(N _ M _ 3^L), L = word.length
+  - each node can have 3 children(not 4, we don't consider where we came from, using **seen**)
+- Space: O(N\*M + L)
