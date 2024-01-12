@@ -234,3 +234,52 @@ var combinationSum = function (candidates, target) {
   - Maximum depth **T/M**: using the smallest number repeatedly until we exceed target
   - Each Node can have up to N children in the worst case
 - Space: O(T/M), maximum call stack
+
+## [Example 2: 52. N-Queens II](https://leetcode.com/problems/n-queens-ii/description/)
+
+```js
+/**
+https://leetcode.com/problems/n-queens-ii/description/
+52. N-Queens II
+ * @param {number} n
+ * @return {number}
+ */
+var totalNQueens = function (n) {
+  const backtrack = (row, col, d, ad) => {
+    if (row === n) {
+      return 1
+    }
+
+    let solutions = 0
+    for (let c = 0; c < n; c++) {
+      if (col.has(c) || d.has(row - c) || ad.has(row + c)) {
+        continue
+      }
+
+      col.add(c)
+      d.add(row - c)
+      ad.add(row + c)
+
+      solutions += backtrack(row + 1, col, d, ad)
+
+      col.delete(c)
+      d.delete(row - c)
+      ad.delete(row + c)
+    }
+
+    return solutions
+  }
+
+  return backtrack(0, new Set(), new Set(), new Set())
+}
+```
+
+- base condition: row reaches the N
+  - check these duplicates
+  - row is duplicated?
+  - diagonal (row - col) is duplicated?
+  - anti-diagonal (row + col) is duplicated?
+- send backtrack and get back to the previous status
+
+- Time: O(N!), it isn't actually known, approximately
+- Space: O(N), recursion call stack
