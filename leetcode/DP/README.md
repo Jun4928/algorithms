@@ -166,3 +166,16 @@ var rob = function (nums) {
 ```
 
 - It's the same, store the current value in memo array
+
+## Time and Space
+
+- if there are N possible states, and each step needs F
+- Time: O(N \* F)
+- Space: O(N)
+  - top-down: hash map, recursions
+  - bottom-up: array for tabulation
+- If there were three states
+  - I: iteration
+  - K: given in the problem
+  - Holding: boolean
+  - I _ K _ 2 => O(N\* K)
