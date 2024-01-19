@@ -179,3 +179,75 @@ var rob = function (nums) {
   - K: given in the problem
   - Holding: boolean
   - I _ K _ 2 => O(N\* K)
+
+---
+
+# Framework for DP
+
+### 1. A function or data structure that will compute/contain the answer to the problem for any given state
+
+- What the function is returning
+- What arguments the function should take (state variables)
+
+> Think about state variables as if the problem was a real-life scenario. What information needed to 100% describe a scenario
+
+### 2. A recurrence relation to transition between states
+
+- DP(100) = min(DP(99) + cost[100], DP(98) + cost[100])
+- you take this step, it could come from either the two steps before or the one step before
+
+### 3. Base Cases
+
+- need base cases
+- if curr < 0 means there is no step, cost
+
+## TOP-DOWN
+
+```js
+/**
+https://leetcode.com/problems/min-cost-climbing-stairs/
+746. Min Cost Climbing Stairs
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = function (cost) {
+  let memo = Array(cost.length).fill(-1)
+  const DP = curr => {
+    if (curr < 0) {
+      return 0
+    }
+
+    if (memo[curr] >= 0) {
+      return memo[curr]
+    }
+
+    const result = Math.min(
+      DP(curr - 2) + cost[curr],
+      DP(curr - 1) + cost[curr]
+    )
+    memo[curr] = result
+    return result
+  }
+
+  DP(cost.length - 1)
+  return Math.min(memo.at(-1), memo.at(-2))
+}
+```
+
+## BOTTOM-TO-TOP
+
+```js
+var minCostClimbingStairs = function (cost) {
+  let memo = Array(cost.length).fill(-1)
+  memo[0] = cost[0]
+  memo[1] = cost[1]
+  for (let curr = 2; curr < memo.length; curr++) {
+    memo[curr] = Math.min(
+      memo[curr - 2] + cost[curr],
+      memo[curr - 1] + cost[curr]
+    )
+  }
+
+  return Math.min(memo.at(-1), memo.at(-2))
+}
+```
