@@ -313,3 +313,50 @@ var lengthOfLIS = function (nums) {
   return longest
 }
 ```
+
+## [Example 3: 2140. Solving Questions With Brainpower](https://leetcode.com/problems/solving-questions-with-brainpower/)
+
+**TOP-DOWN**
+
+```js
+var mostPoints = function (questions) {
+  const q = questions.length
+  let memo = Array(q).fill(-1)
+  const DP = curr => {
+    if (curr >= q) {
+      return 0
+    }
+
+    if (memo[curr] > -1) {
+      return memo[curr]
+    }
+
+    const [point, brain] = questions[curr]
+    memo[curr] = Math.max(DP(curr + brain + 1) + point, DP(curr + 1))
+    return memo[curr]
+  }
+
+  return DP(0)
+}
+```
+
+**BOTTOM-UP**
+
+```js
+/**
+ * @param {number[][]} questions
+ * @return {number}
+ */
+var mostPoints = function (questions) {
+  let n = questions.length
+  let dp = new Array(n + 1).fill(0) // n + 1 to avoid out of bounds
+
+  for (let i = n - 1; i >= 0; i--) {
+    let j = i + questions[i][1] + 1
+    // need to make sure we don't go out of bounds
+    dp[i] = Math.max(questions[i][0] + dp[Math.min(j, n)], dp[i + 1])
+  }
+
+  return dp[0]
+}
+```
