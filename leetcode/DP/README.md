@@ -251,3 +251,65 @@ var minCostClimbingStairs = function (cost) {
   return Math.min(memo.at(-1), memo.at(-2))
 }
 ```
+
+## [Example2](https://leetcode.com/problems/longest-increasing-subsequence/description/)
+
+**TOP-DOWN**
+
+```js
+var lengthOfLIS = function (nums) {
+  let memoize = Array(nums.length).fill(-1)
+  const DP = index => {
+    if (memoize[index] > 0) {
+      return memoize[index]
+    }
+
+    let subsequence = 1
+    for (let pointer = 0; pointer < index; pointer++) {
+      if (nums[index] > nums[pointer]) {
+        subsequence = Math.max(subsequence, DP(pointer) + 1)
+      }
+    }
+
+    memoize[index] = subsequence
+    return subsequence
+  }
+
+  let longest = 0
+  for (let i = 0; i < nums.length; i++) {
+    longest = Math.max(longest, DP(i))
+  }
+
+  return longest
+}
+```
+
+- The problem is asking the longest increasing subsequence. The function should return it
+- For state variables, just stick with index, **DP(index)** return the LIS that ends with the Ith element
+- if the previous element was strictly less than the current number, send this pointer to DP, to figure out the LIS and add one.
+- The base case is length 1 (subsequence including itself)
+
+**BOTTOM-UP**
+
+```js
+/**
+https://leetcode.com/problems/longest-increasing-subsequence/
+300. Longest Increasing Subsequence
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function (nums) {
+  let memoize = Array(nums.length).fill(1)
+  let longest = 1
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[i] > nums[j]) {
+        memoize[i] = Math.max(memoize[i], memoize[j] + 1)
+        longest = Math.max(longest, memoize[i])
+      }
+    }
+  }
+
+  return longest
+}
+```
