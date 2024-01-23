@@ -32,24 +32,19 @@ https://leetcode.com/problems/min-cost-climbing-stairs/
 var minCostClimbingStairs = function (cost) {
   let memo = Array(cost.length).fill(-1)
   const DP = curr => {
-    if (curr < 0) {
+    if (curr >= cost.length) {
       return 0
     }
 
-    if (memo[curr] >= 0) {
+    if (memo[curr] > -1) {
       return memo[curr]
     }
 
-    const result = Math.min(
-      DP(curr - 2) + cost[curr],
-      DP(curr - 1) + cost[curr]
-    )
-    memo[curr] = result
-    return result
+    memo[curr] = Math.min(DP(curr + 1) + cost[curr], DP(curr + 2) + cost[curr])
+    return memo[curr]
   }
 
-  DP(cost.length - 1)
-  return Math.min(memo.at(-1), memo.at(-2))
+  return Math.min(DP(0), DP(1))
 }
 
 /**
