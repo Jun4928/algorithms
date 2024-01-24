@@ -360,3 +360,50 @@ var mostPoints = function (questions) {
   return dp[0]
 }
 ```
+
+---
+
+# Multi-dimensional Problems
+
+## [Example 1: 1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/description/)
+
+```js
+/**
+https://leetcode.com/problems/longest-common-subsequence/description/
+1143. Longest Common Subsequence
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = function (text1, text2) {
+  let memo = [...Array(text1.length)].map(_ => Array(text2.length).fill(-1))
+
+  const DP = (i, j) => {
+    if (i >= text1.length || j >= text2.length) {
+      return 0
+    }
+
+    if (memo[i][j] > -1) {
+      return memo[i][j]
+    }
+
+    let result
+    if (text1[i] === text2[j]) {
+      result = DP(i + 1, j + 1) + 1
+    } else {
+      result = Math.max(DP(i, j + 1), DP(i + 1, j))
+    }
+
+    memo[i][j] = result
+    return memo[i][j]
+  }
+
+  return DP(0, 0)
+}
+```
+
+- DP returns LCS(longest common subsequence)
+- two index **[i, j]**
+  - if they are the same character, move pointer next
+  - if not, either move i or j and find the maximum
+- Time: O(N \* M), each state is O(1)
