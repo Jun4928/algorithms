@@ -407,3 +407,45 @@ var longestCommonSubsequence = function (text1, text2) {
   - if they are the same character, move pointer next
   - if not, either move i or j and find the maximum
 - Time: O(N \* M), each state is O(1)
+
+## [Example 2: 188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/)
+
+```js
+/**
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/
+188. Best Time to Buy and Sell Stock IV
+ * @param {number} k
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function (k, prices) {
+  const memo = new Map()
+  const getKey = (curr, holding, remain) => `${curr}-${holding}-${remain}`
+
+  const DP = (curr, holding, remain) => {
+    if (remain === 0 || curr === prices.length) {
+      return 0
+    }
+
+    const key = getKey(curr, holding, remain)
+    if (memo.has(key)) {
+      return memo.get(key)
+    }
+
+    let max = DP(curr + 1, holding, remain) // just skip
+    // holding means if there's a stock to sell
+    if (holding) {
+      // should sell before buying something, after transaction remain - 1
+      max = Math.max(max, DP(curr + 1, 0, remain - 1) + prices[curr])
+    } else {
+      // should buy first
+      max = Math.max(max, DP(curr + 1, 1, remain) - prices[curr])
+    }
+
+    memo.set(key, max)
+    return memo.get(key)
+  }
+
+  return DP(0, 0, k)
+}
+```
