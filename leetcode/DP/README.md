@@ -410,6 +410,8 @@ var longestCommonSubsequence = function (text1, text2) {
 
 ## [Example 2: 188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/)
 
+**TOP-DOWN**
+
 ```js
 /**
 https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/
@@ -447,5 +449,125 @@ var maxProfit = function (k, prices) {
   }
 
   return DP(0, 0, k)
+}
+```
+
+**BOTTOM-UP**
+
+```js
+/**
+ * @param {number} k
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function (k, prices) {
+  let n = prices.length
+  let dp = []
+  for (let i = 0; i <= n; i++) {
+    dp.push([])
+    for (let j = 0; j < 2; j++) {
+      dp[i].push(new Array(k + 1).fill(0))
+    }
+  }
+
+  for (let i = n - 1; i >= 0; i--) {
+    for (let remain = 1; remain <= k; remain++) {
+      for (let holding = 0; holding < 2; holding++) {
+        let ans = dp[i + 1][holding][remain]
+        if (holding == 1) {
+          ans = Math.max(ans, prices[i] + dp[i + 1][0][remain - 1])
+        } else {
+          ans = Math.max(ans, -prices[i] + dp[i + 1][1][remain])
+        }
+
+        dp[i][holding][remain] = ans
+      }
+    }
+  }
+
+  return dp[0][0][k]
+}
+```
+
+### [Example 3: 2218. Maximum Value of K Coins From Piles](https://leetcode.com/problems/maximum-value-of-k-coins-from-piles/description/)
+
+**TOP-DOWN**
+
+```js
+/**
+https://leetcode.com/problems/maximum-value-of-k-coins-from-piles/description/
+2218. Maximum Value of K Coins From Piles
+ * @param {number[][]} piles
+ * @param {number} k
+ * @return {number}
+ */
+var maxValueOfCoins = function (piles, k) {
+  const memo = new Map()
+  const getKey = (row, remain) => `${row}-${remain}`
+  const DP = (row, remain) => {
+    if (remain === 0 || row >= piles.length) {
+      return 0
+    }
+
+    const key = getKey(row, remain)
+    if (memo.has(key)) {
+      return memo.get(key)
+    }
+
+    let max = DP(row + 1, remain) // skip the pile
+    let wallet = 0
+    for (
+      // choose coins from the pile until it consumes remain ones
+      let choose = 0;
+      choose < Math.min(piles[row].length, remain);
+      choose++
+    ) {
+      wallet += piles[row][choose]
+      max = Math.max(max, wallet + DP(row + 1, remain - choose - 1))
+    }
+
+    memo.set(key, max)
+    return memo.get(key)
+  }
+
+  return DP(0, k)
+}
+```
+
+- at each pile,
+  - skip to the next pile
+  - take some, choose how many coins to take
+  - choose starts from 0, so should minus one to calculate remain ones
+
+**BOTTOM-UP**
+
+```js
+/**
+ * @param {number[][]} piles
+ * @param {number} k
+ * @return {number}
+ */
+var maxValueOfCoins = function (piles, k) {
+  let n = piles.length
+  let dp = []
+  for (let i = 0; i <= n; i++) {
+    dp.push(new Array(k + 1).fill(0))
+  }
+
+  for (let i = n - 1; i >= 0; i--) {
+    for (let remain = 1; remain <= k; remain++) {
+      dp[i][remain] = dp[i + 1][remain] // skip this pile
+      let curr = 0
+      for (let j = 0; j < Math.min(remain, piles[i].length); j++) {
+        curr += piles[i][j]
+        dp[i][remain] = Math.max(
+          dp[i][remain],
+          curr + dp[i + 1][remain - j - 1]
+        )
+      }
+    }
+  }
+
+  return dp[0][k]
 }
 ```
