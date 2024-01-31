@@ -571,3 +571,175 @@ var maxValueOfCoins = function (piles, k) {
   return dp[0][k]
 }
 ```
+
+---
+
+# Matrix DP
+
+- DP on a matrix is a common pattern
+- the matrix can be modeled as a graph, each square is a node and there will be edges along adjacent squares
+
+## [Example 1: 62. Unique Paths](https://leetcode.com/problems/unique-paths/description/)
+
+**Recursive**
+
+```js
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function (m, n) {
+  const rows = m
+  const cols = n
+  const directions = [
+    [0, 1],
+    [1, 0],
+  ]
+  const notSafe = (x, y) => x < 0 || y < 0 || x >= rows || y >= cols
+  let memo = [...Array(rows)].map(_ => Array(cols).fill(-1))
+
+  const DP = (row, col) => {
+    if (notSafe(row, col)) {
+      return 0
+    }
+
+    if (row === rows - 1 && col === cols - 1) {
+      return 1
+    }
+
+    if (memo[row][col] !== -1) {
+      return memo[row][col]
+    }
+
+    let ways = 0
+    for (const [dx, dy] of directions) {
+      ways += DP(row + dx, col + dy)
+    }
+
+    memo[row][col] = ways
+    return memo[row][col]
+  }
+
+  return DP(0, 0)
+}
+```
+
+**Iteration**
+
+```js
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function (m, n) {
+  const rows = m
+  const cols = n
+  let memo = [...Array(rows)].map(_ => Array(cols).fill(0))
+  const directions = [
+    [0, 1],
+    [1, 0],
+  ]
+  const notSafe = (x, y) => x >= rows || y >= cols
+
+  memo[rows - 1][cols - 1] = 1
+  for (let row = rows - 1; row >= 0; row--) {
+    for (let col = cols - 1; col >= 0; col--) {
+      for (const [dx, dy] of directions) {
+        const [x, y] = [row + dx, col + dy]
+        memo[row][col] += notSafe(x, y) ? 0 : memo[x][y]
+      }
+    }
+  }
+
+  return memo[0][0]
+}
+```
+
+- base case is.. when we reach the end
+- Time: O(N \* M)
+- Space: O(N \* M)
+
+## [Example 2: 64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/description/)
+
+**Recursive**
+
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var minPathSum = function (grid) {
+  const rows = grid.length
+  const cols = grid[0].length
+  const notSafe = (x, y) => x >= rows || y >= cols
+  const directions = [
+    [0, 1],
+    [1, 0],
+  ]
+
+  let memo = [...Array(rows)].map(_ => Array(cols).fill(-1))
+  memo[rows - 1][cols - 1] = grid[rows - 1][cols - 1]
+
+  const DP = (row, col) => {
+    if (notSafe(row, col)) {
+      return null
+    }
+
+    if (memo[row][col] !== -1) {
+      return memo[row][col]
+    }
+
+    let min = Infinity
+    for (const [dx, dy] of directions) {
+      const res = DP(row + dx, col + dy)
+      if (res != null) {
+        min = Math.min(min, grid[row][col] + res)
+      }
+    }
+
+    memo[row][col] = min
+    return memo[row][col]
+  }
+
+  return DP(0, 0)
+}
+```
+
+**iteration**
+
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var minPathSum = function (grid) {
+  const rows = grid.length
+  const cols = grid[0].length
+  const notSafe = (x, y) => x >= rows || y >= cols
+  const directions = [
+    [0, 1],
+    [1, 0],
+  ]
+
+  let memo = [...Array(rows)].map(_ => Array(cols).fill(Infinity))
+  memo[rows - 1][cols - 1] = grid[rows - 1][cols - 1]
+
+  for (let row = rows - 1; row >= 0; row--) {
+    for (let col = cols - 1; col >= 0; col--) {
+      for (const [dx, dy] of directions) {
+        const [x, y] = [row + dx, col + dy]
+        if (!notSafe(x, y)) {
+          memo[row][col] = Math.min(memo[row][col], memo[x][y] + grid[row][col])
+        }
+      }
+    }
+  }
+
+  return memo[0][0]
+}
+```
+
+- Time: O(M \* N)
+- Space: O(M \* N)
