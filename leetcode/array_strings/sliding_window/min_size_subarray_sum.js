@@ -31,12 +31,11 @@
 var minSubArrayLen = function (target, nums) {
   let left = 0
   let sum = 0
-  let minLength = Number.POSITIVE_INFINITY
-
+  let minLength = Infinity
   for (let right = 0; right < nums.length; right++) {
     sum += nums[right]
 
-    // there are many valid situations
+    // many valid situations
     while (sum >= target) {
       minLength = Math.min(minLength, right - left + 1)
       sum -= nums[left]
@@ -44,7 +43,5 @@ var minSubArrayLen = function (target, nums) {
     }
   }
 
-  return minLength === Number.POSITIVE_INFINITY ? 0 : minLength
+  return minLength === Infinity ? 0 : minLength
 }
-
-module.exports = { minSubArrayLen }
