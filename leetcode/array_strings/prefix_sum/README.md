@@ -8,7 +8,7 @@
 - `prefix[i - 1]` is the sum of all elements before index i
 - `prefix[j] - prefix[i- 1]`, left with the sum of all elements starting at index i and ending at index j
 
-> Building a prefix sum is a from of pre-processing. It only costs O(n) to build, and subarray queries to be O(1), it can improve main parts of the algorithm.
+> Building a prefix sum is a form of pre-processing. It only costs O(n) to build, and subarray queries to be O(1), it can improve main parts of the algorithm.
 
 ## Example1
 

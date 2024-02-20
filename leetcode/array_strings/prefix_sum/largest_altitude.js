@@ -1,4 +1,7 @@
 /**
+ * https://leetcode.com/problems/find-the-highest-altitude/description/
+ * 1732. Find the Highest Altitude
+ *
  * @param {number[]} gain
  * @return {number}
  */
@@ -13,5 +16,16 @@ var largestAltitude = function (gain) {
 
   return largest
 }
+
+// var largestAltitude = function (gain) {
+//   let highest = 0
+//   let sum = 0
+//   for (const net of gain) {
+//     sum += net
+//     highest = Math.max(highest, sum)
+//   }
+
+//   return highest
+// }
 
 module.exports = { largestAltitude }
