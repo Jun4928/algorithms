@@ -10,16 +10,5 @@ var maxFrequencyElements = function (nums) {
     max = Math.max(max, m.get(num))
   }
 
-  return [...m.values()]
-    .sort((a, b) => {
-      if (a > b) {
-        return 1
-      } else if (a < b) {
-        return -1
-      }
-
-      return 0
-    })
-    .filter(v => v === max)
-    .reduce((a, b) => a + b, 0)
+  return [...m.values()].filter(v => v === max).reduce((a, b) => a + b, 0)
 }
